@@ -35,15 +35,6 @@ cd ElectroBench/ElectroBench-1.0/
 chmod u+x ./build.sh && bash ./build.sh
 ```
 
-*v1.0:*
-
-```sh
-sudo apt install git -y --no-install-recommends
-git clone https://github.com/AyoubCoding21/ElectroBench/
-cd ElectroBench/ElectroBench-1.0/
-chmod u+x ./build.sh && bash ./build.sh
-```
-
 *v1.1:*
 
 ```sh
