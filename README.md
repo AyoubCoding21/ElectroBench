@@ -94,7 +94,7 @@ chmod u+x ./build.sh && bash ./build.sh
 sudo pacman -S git
 git clone https://github.com/AyoubCoding21/ElectroBench/
 cd ElectroBench/ElectroBench-1.0/
-chmod u+x ./build.sh && bash ./build.sh
+chmod u+x ./build-arch.sh && bash ./build-arch.sh
 ```
 
 *v1.1:*
@@ -103,7 +103,7 @@ chmod u+x ./build.sh && bash ./build.sh
 sudo pacman -S git
 git clone https://github.com/AyoubCoding21/ElectroBench/
 cd ElectroBench/ElectroBench-1.1/
-chmod u+x ./build.sh && bash ./build.sh
+chmod u+x ./build-arch.sh && bash ./build-arch.sh
 ```
 
 *v1.2:*
@@ -112,7 +112,7 @@ chmod u+x ./build.sh && bash ./build.sh
 sudo pacman -S git
 git clone https://github.com/AyoubCoding21/ElectroBench/
 cd ElectroBench/ElectroBench-1.2/
-chmod u+x ./build.sh && bash ./build.sh
+chmod u+x ./build-arch.sh && bash ./build-arch.sh
 ```
 
 *v1.3:*
@@ -122,7 +122,7 @@ chmod u+x ./build.sh && bash ./build.sh
 sudo pacman -S git
 git clone https://github.com/AyoubCoding21/ElectroBench/
 cd ElectroBench/ElectroBench-1.3/
-chmod u+x ./build.sh && bash ./build.sh
+chmod u+x ./build-arch.sh && bash ./build-arch.sh
 ```
 
 *v1.4:*
@@ -131,7 +131,7 @@ chmod u+x ./build.sh && bash ./build.sh
 sudo pacman -S git
 git clone https://github.com/AyoubCoding21/ElectroBench/
 cd ElectroBench/ElectroBench-1.4/
-chmod u+x ./build.sh && bash ./build.sh
+chmod u+x ./build-arch.sh && bash ./build-arch.sh
 ```
 
 *v1.5:*
@@ -141,7 +141,7 @@ chmod u+x ./build.sh && bash ./build.sh
 sudo pacman -S git
 git clone https://github.com/AyoubCoding21/ElectroBench/
 cd ElectroBench/ElectroBench-1.5/
-chmod u+x ./build.sh && bash ./build.sh
+chmod u+x ./build-arch.sh && bash ./build-arch.sh
 ```
 
 # Questions or misunderstanding or pull requests
