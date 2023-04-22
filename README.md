@@ -1,7 +1,7 @@
 # ElectroBench
 ElectroBench is a GLSL 1.2 + C++ based benchmark for Debian-based Linux PCs, It demonstrates medium->advanced lighting situations using GLSL 1.2 shaders, and has an integrated FPS counter.
 
-# Technical informations about ElectroBench 
+# Technical informations about ElectroBench: 
 
 ElectroBench has 6 versions, each of them use a *specific* lighting effect ; v1.0 uses Toon, v1.1 uses Directional Light Per Pixel, v1.2 uses Point Light Per Pixel, v1.3 uses Point Light Per Pixel + Toon, v1.4 uses Phong + Rim lighting and v1.5 uses Phong + Rim + Toon lighting.
 
@@ -15,19 +15,19 @@ I'm gonna first explain some of the effects that are in this project :
 
 **Rim** : Rim is a lighting effect that gives glow to an object.
 
-**Rendering**
+**Rendering:**
 
 The project renders a teapot, then uses shaders to apply the effects on it, with the help of some attributes mentionned in the main.cxx file.
 
-**Connection bettween shaders**
+**Connection bettween shaders:**
 
 The vertex and fragment shaders in ElectroBench (*v1.1+*) uses a bi-directionnal connection made possible by the use of varying variables.
 
-**Programming languages used**
+**Programming languages used:**
 
 The programming languages used are **C++** for the *main* code, **GLSL 1.2 (OpenGL 2.1)** for shaders and **Shell and CMake** for execution and building.
 
-# How to execute this project
+# How to execute this project ?
 It's so simple, just follow the instructions for the versions you want to execute :
 
 *v1.0:*
