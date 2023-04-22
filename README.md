@@ -1,5 +1,5 @@
 # ElectroBench
-ElectroBench is a GLSL 1.2 + C++ based benchmark for Debian-based Linux PCs, It demonstrates medium->advanced lighting situations using GLSL 1.2 shaders, and has an integrated FPS counter.
+ElectroBench is a GLSL 1.2 + C++ based benchmark for Arch and Debian-based Linux PCs, It demonstrates medium->advanced lighting situations using GLSL 1.2 shaders, and has an integrated FPS counter.
 
 # Technical informations about ElectroBench: 
 
@@ -29,6 +29,8 @@ The programming languages used are **C++** for the *main* code, **GLSL 1.2 (Open
 
 # How to execute this project ?
 It's so simple, just follow the instructions for the versions you want to execute :
+
+**For Debian-based OSes:**
 
 *v1.0:*
 
@@ -79,6 +81,64 @@ chmod u+x ./build.sh && bash ./build.sh
 
 ```sh
 sudo apt install git -y --no-install-recommends
+git clone https://github.com/AyoubCoding21/ElectroBench/
+cd ElectroBench/ElectroBench-1.5/
+chmod u+x ./build.sh && bash ./build.sh
+```
+
+**For Arch-based OSes:**
+
+*v1.0:*
+
+```sh
+sudo pacman -S git
+git clone https://github.com/AyoubCoding21/ElectroBench/
+cd ElectroBench/ElectroBench-1.0/
+chmod u+x ./build.sh && bash ./build.sh
+```
+
+*v1.1:*
+
+```sh
+sudo pacman -S git
+git clone https://github.com/AyoubCoding21/ElectroBench/
+cd ElectroBench/ElectroBench-1.1/
+chmod u+x ./build.sh && bash ./build.sh
+```
+
+*v1.2:*
+
+```sh
+sudo pacman -S git
+git clone https://github.com/AyoubCoding21/ElectroBench/
+cd ElectroBench/ElectroBench-1.2/
+chmod u+x ./build.sh && bash ./build.sh
+```
+
+*v1.3:*
+
+
+```sh
+sudo pacman -S git
+git clone https://github.com/AyoubCoding21/ElectroBench/
+cd ElectroBench/ElectroBench-1.3/
+chmod u+x ./build.sh && bash ./build.sh
+```
+
+*v1.4:*
+
+```sh
+sudo pacman -S git
+git clone https://github.com/AyoubCoding21/ElectroBench/
+cd ElectroBench/ElectroBench-1.4/
+chmod u+x ./build.sh && bash ./build.sh
+```
+
+*v1.5:*
+
+
+```sh
+sudo pacman -S git
 git clone https://github.com/AyoubCoding21/ElectroBench/
 cd ElectroBench/ElectroBench-1.5/
 chmod u+x ./build.sh && bash ./build.sh
