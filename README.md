@@ -15,6 +15,10 @@ I'm gonna first explain some of the effects that are in this project :
 
 **Rim** : Rim is a lighting effect that gives glow to an object.
 
+**Rendering**
+
+The project renders a teapot, then uses shaders to apply the effects on it, with the help of some attributes mentionned in the main.cxx file.
+
 **Connection bettween shaders**
 
 The vertex and fragment shaders in ElectroBench (*v1.1+*) uses a bi-directionnal connection made possible by the use of varying variables.
