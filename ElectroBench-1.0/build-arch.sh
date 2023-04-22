@@ -1,5 +1,5 @@
 echo -e "\e[1;33m${bold}Installing packages...\e[0m";
-sudo pacman -Sy && sudo pacman -S llvm freeglut glew cmake clang libglvnd lld llvm-libs
+sudo pacman -Sy && sudo pacman -S llvm freeglut glew cmake clang libglvnd lld llvm-libs glibc archlinux-keyring
 echo -e "\e[1;33m${bold}Setting up...\e[0m";
 if [ -d build/ ]
 then
