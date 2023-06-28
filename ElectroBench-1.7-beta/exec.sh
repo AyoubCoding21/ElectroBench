@@ -45,4 +45,4 @@ main() {
         fi
 }
 
-main "ElectroBench v1.7-beta" 0.35
+main "ElectroBench v1.7-beta" 0.58
