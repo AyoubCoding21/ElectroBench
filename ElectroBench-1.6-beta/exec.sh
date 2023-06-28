@@ -44,5 +44,4 @@ main() {
                 echo -e "\e[1;31m${bold}Errors occured ! See output above.\e[0m"
         fi
 }
-
 main "ElectroBench v1.6-beta" 0.2
