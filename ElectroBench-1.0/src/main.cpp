@@ -34,8 +34,7 @@ char *textFileRead(char *fn) {
 	return content;
 }
 
-GLint loc;
-GLuint v,f,f2,p;
+GLuint v,f,p;
 
 float lpos[4] = {1.2540,0.5525420,1.023453,0.5};
 
@@ -171,7 +170,6 @@ void setShaders()
 
 	printShaderInfoLog(v);
 	printShaderInfoLog(f);
-	printShaderInfoLog(f2);
 
 	p = glCreateProgram();
 	glAttachShader(p,v);
@@ -181,7 +179,6 @@ void setShaders()
 	printProgramInfoLog(p);
 
 	glUseProgram(p);
-	loc = glGetUniformLocation(p,"time");
 }
 
 int main(int argc, char **argv) {
