@@ -11,7 +11,7 @@ I'm gonna first explain some of the effects that are in this project :
 
 **Point Light** : It's light focused in a single point of cordinnates x, y and *optionnaly* z. It's calculated using how far a fragment is from the light center.
 
-**Phong** : It's like Point Light.
+**Phong** : It's like Point Light but it uses lighting components (diffuse, specular, ambient and shininess).
 
 **Rim** : Rim is a lighting effect that gives glow to an object.
 
