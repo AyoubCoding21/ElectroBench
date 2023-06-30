@@ -100,7 +100,7 @@ chmod u+x ./build.sh && bash ./build.sh
 sudo apt install git -y --no-install-recommends
 git clone https://github.com/AyoubCoding21/ElectroBench/
 sleep 2s
-cd ElectroBench/ElectroBench-1.6-Beta/
+cd ElectroBench/ElectroBench-1.6-beta/
 chmod u+x ./exec.sh && bash ./exec.sh
 ```
 
@@ -110,7 +110,7 @@ chmod u+x ./exec.sh && bash ./exec.sh
 sudo apt install git -y --no-install-recommends
 git clone https://github.com/AyoubCoding21/ElectroBench/
 sleep 2s
-cd ElectroBench/ElectroBench-1.7-Beta/
+cd ElectroBench/ElectroBench-1.7-beta/
 chmod u+x ./exec.sh && bash ./exec.sh
 ```
 
