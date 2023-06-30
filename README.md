@@ -41,6 +41,7 @@ It's so simple, just follow the instructions for the versions you want to execut
 ```sh
 sudo apt install git -y --no-install-recommends
 git clone https://github.com/AyoubCoding21/ElectroBench/
+sleep 2s
 cd ElectroBench/ElectroBench-1.0/
 chmod u+x ./build.sh && bash ./build.sh
 ```
@@ -50,6 +51,7 @@ chmod u+x ./build.sh && bash ./build.sh
 ```sh
 sudo apt install git -y --no-install-recommends
 git clone https://github.com/AyoubCoding21/ElectroBench/
+sleep 2s
 cd ElectroBench/ElectroBench-1.1/
 chmod u+x ./build.sh && bash ./build.sh
 ```
@@ -59,6 +61,7 @@ chmod u+x ./build.sh && bash ./build.sh
 ```sh
 sudo apt install git -y --no-install-recommends
 git clone https://github.com/AyoubCoding21/ElectroBench/
+sleep 2s
 cd ElectroBench/ElectroBench-1.2/
 chmod u+x ./build.sh && bash ./build.sh
 ```
@@ -67,7 +70,8 @@ chmod u+x ./build.sh && bash ./build.sh
 
 ```sh
 sudo apt install git -y --no-install-recommends
-git clone https://github.com/AyoubCoding21/ElectroBench/
+git clone https://github.com/AyoubCoding21/ElectroBench/;
+sleep 2s
 cd ElectroBench/ElectroBench-1.3/
 chmod u+x ./build.sh && bash ./build.sh
 ```
@@ -77,6 +81,7 @@ chmod u+x ./build.sh && bash ./build.sh
 ```sh
 sudo apt install git -y --no-install-recommends
 git clone https://github.com/AyoubCoding21/ElectroBench/
+sleep 2s
 cd ElectroBench/ElectroBench-1.4/
 chmod u+x ./build.sh && bash ./build.sh
 ```
@@ -94,6 +99,7 @@ chmod u+x ./build.sh && bash ./build.sh
 ```sh
 sudo apt install git -y --no-install-recommends
 git clone https://github.com/AyoubCoding21/ElectroBench/
+sleep 2s
 cd ElectroBench/ElectroBench-1.6-Beta/
 chmod u+x ./exec.sh && bash ./exec.sh
 ```
@@ -103,6 +109,7 @@ chmod u+x ./exec.sh && bash ./exec.sh
 ```sh
 sudo apt install git -y --no-install-recommends
 git clone https://github.com/AyoubCoding21/ElectroBench/
+sleep 2s
 cd ElectroBench/ElectroBench-1.7-Beta/
 chmod u+x ./exec.sh && bash ./exec.sh
 ```
