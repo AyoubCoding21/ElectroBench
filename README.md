@@ -3,7 +3,7 @@ ElectroBench is a GLSL 1.2 + C++ based benchmark for Debian-based Linux PCs, It 
 
 # Technical informations about ElectroBench: 
 
-ElectroBench has 10 versions, each of them use a *specific* lighting effect ; v1.0 uses Toon, v1.1 uses Directional Light Per Pixel, v1.2 uses Point Light Per Pixel, v1.3 uses Point Light Per Pixel + Toon, v1.4 uses Phong + Rim lighting, v1.5 uses Phong + Rim + Toon lighting, v1.6 uses Blinn-Phong + Rim + Shadows, v1.7 uses Blinn-Phong + Toon + Shadows, v1.8 uses Blinn-Phong + Toon + Rim + Shadows and v1.9 uses Blinn-Phong + Rim + Toon + Fire effect.
+ElectroBench has 10 versions, each of them use a *specific* lighting effect : v1.0 uses Toon, v1.1 uses Directional Light Per Pixel, v1.2 uses Point Light Per Pixel, v1.3 uses Point Light Per Pixel + Toon, v1.4 uses Phong + Rim lighting, v1.5 uses Phong + Rim + Toon lighting, v1.6 uses Blinn-Phong + Rim + Shadows, v1.7 uses Blinn-Phong + Toon + Shadows, v1.8 uses Blinn-Phong + Toon + Rim + Shadows and v1.9 uses Blinn-Phong + Rim + Toon + Fire effect.
 
 I'm gonna first explain some of the effects that are in this project : 
 
