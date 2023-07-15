@@ -21,6 +21,7 @@ main() {
                 sudo rm -f ./libglut-dev_3.4.0-1_amd64.deb
                 sudo rm -f ./libglut3.12_3.4.0-1_amd64.deb
         fi
+        echo -e "\e[1;32m${bold}Skipping installing packages...\e[0m";
         if [ -d build/ ]
         then
                 sleep 1s
@@ -34,7 +35,8 @@ main() {
         fi
         # Compiling
         echo -e "\e[1;33m${bold}Compiling the source code...\e[0m";
-        clang++ ./src/main.cxx -o ./build/ElectroBench -I/usr/include/ -L/usr/lib/ -lglut -lGL -lGLU -lX11 -lGLEW -v
+        clang++ -S -v -emit-llvm ./src/main.cxx -o ./src/main.ll;
+        clang++ -x ir ./src/main.ll -L../usr/lib/ -I../usr/include/ -lGL -lGLU -lGLEW -lglut -lX11 -o build/ElectroBench -v
         # Executing
         if [ -f ./build/ElectroBench ]
         then
@@ -44,5 +46,4 @@ main() {
                 echo -e "\e[1;31m${bold}Errors occured ! See output above.\e[0m"
         fi
 }
-
-main "ElectroBench v1.8-beta" 0.58
+main "ElectroBench v1.8-beta" 0.5
