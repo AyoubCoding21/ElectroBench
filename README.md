@@ -35,6 +35,9 @@ The programming languages used are **C++** for the *main* code, **GLSL 1.2 (Open
 
 **Note**: CMake wasn't used from v1.6-Beta and higher.
 
+**Compilation of this project:**
+From v1.0 to v1.5, The project used CMake for building but from v1.6-beta+, we used a 2-step manual compilation, it generates LLVM IR to a file and then compiles and links that IR.
+
 # How to execute this project ?
 It's so simple, just follow the instructions for the versions you want to execute :
 
