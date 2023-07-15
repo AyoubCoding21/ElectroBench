@@ -17,7 +17,7 @@ I'm gonna first explain some of the effects that are in this project :
 
 **Blinn-Phong**: Blinn-Phong is a *mathematically* optimised superset of Phong. It uses 2 lighting components (diffuse and specular).
 
-**Shadows**: Shadows in this benchmark are used by calculating clamp to dot by the lighhting vectors and some initial values then multipling it by the color, It was used in v1.8-Beta, but in other versions it uses shadow-mapping. 
+**Shadows**: Shadows in this benchmark are used by calculating clamp to dot of the vPositon and vNormal of the light then multipling it by the color, It was used in v1.8-Beta, but in other versions it uses shadow-mapping. 
 
 **Fire effect**: For this *virtual* fire effect we addded a lambert effect to the calculations. And we used a *degrade* color system for bottom to top (from yellow to red).
 
