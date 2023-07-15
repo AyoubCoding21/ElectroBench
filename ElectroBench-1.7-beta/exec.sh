@@ -36,7 +36,7 @@ main() {
         # Compiling
         echo -e "\e[1;33m${bold}Compiling the source code...\e[0m";
         clang++ -S -v -emit-llvm ./src/main.cxx -o ./src/main.ll;
-        clang++ -x ir ./src/main.ll -L../usr/lib/ -I../usr/include/ -lGL -lGLU -lGLEW -lglut -lX11 -o build/ElectroBench -v
+        clang++ -x ir ./src/main.ll -L/usr/lib/ -I/usr/include/ -lGL -lGLU -lGLEW -lglut -lX11 -o build/ElectroBench -v
         # Executing
         if [ -f ./build/ElectroBench ]
         then
