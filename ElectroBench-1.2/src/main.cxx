@@ -36,20 +36,7 @@ char *textFileRead(char *fn) {
 
 GLuint v,f,p;
 
-float lpos[4] = {1.2540,0.5525420,1.023453,0.5f};
-float lpos2[4] = {2.5,0.5525420,1.453,0.95f};
-float shiniess[1] = {100.0584f};
-float specular[4] = {0.82546286, 0.1245, 0.5225, 0.5f};
-float ambient[4] = {0.555242247, 0.36521545, 0.212548, 0.7f};
-float diffuse[4] = {0.7245275842, 0.225, 0.5548, 0.8f};
-float diffuse2[4] = {0.452452, 0.31245, 0.311, 0.9f};
-float ambient2[4] = {0.898985, 0.545848, 0.288, 0.6};
-float specular2[4] = {0.558458, 0.25589, 0.02585, 0.8f};
-float shiniess2[1] = {128.0f};
-float diffuse3[4] = {0.8, 0.5, 0.311, 0.1f};
-float ambient3[4] = {0.456, 0.35, 0.288, 0.25};
-float specular3[4] = {0.95, 0.25589, 0.85, 0.7};
-float shiniess3[1] = {128.0f};
+float lpos[4] = {1.2540,0.5525420,1.023453,0.5};
 
 void changeSize(int w, int h) {
 	if(h == 0)
@@ -90,40 +77,11 @@ void renderScene(void)
 	gluLookAt(0.0,5.0,5.0, 
 		      0.0,0.0,0.0,
 			  0.0f,1.0f,0.0f);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHT1);
-	glEnable(GL_LIGHT2);
-
-	glLightfv(GL_LIGHT0, GL_POSITION, lpos);
-	glLightfv(GL_LIGHT0, GL_SHININESS, shiniess);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse2);
-	glLightfv(GL_LIGHT1, GL_AMBIENT, ambient2);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, specular2);
-	glLightfv(GL_LIGHT1, GL_SHININESS, shiniess2);
-	glLightfv(GL_LIGHT2, GL_DIFFUSE, diffuse3);
-	glLightfv(GL_LIGHT2, GL_AMBIENT, ambient3);
-	glLightfv(GL_LIGHT2, GL_SPECULAR, specular3);
-	glLightfv(GL_LIGHT2, GL_SHININESS, shiniess3);
-	glLightfv(GL_LIGHT2, GL_POSITION, lpos2);
-
-	glMaterialfv(GL_FRONT, GL_AMBIENT, ambient2);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, specular3);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse);
-	glMaterialfv(GL_FRONT, GL_SHININESS, shiniess2);
-	glMaterialfv(GL_BACK, GL_AMBIENT, ambient);
-	glMaterialfv(GL_BACK, GL_DIFFUSE, diffuse2);
-	glMaterialfv(GL_BACK, GL_SPECULAR, specular2);
-	glMaterialfv(GL_BACK, GL_SHININESS, shiniess3);
-
-	glRotatef(a,6,5,9);
-	glRotatef(b,6,10,8);
+	glRotatef(a,12,15,9);
+	glRotatef(b,13,14,8);
 	glutSolidTeapot(2.4);
 	a+=1;
-	b+=0.5;
+	b+=1.5;
 
 	glutSwapBuffers();
 }
@@ -234,8 +192,7 @@ int main(int argc, char **argv) {
 	glutReshapeFunc(changeSize);
 	glutKeyboardFunc(processNormalKeys);
 
-	glClearColor(0.0,0.0,0.0,1.0);
-
+	glClearColor(0.0, 0.0, 0.0, 1.0);
 
 	glewInit();
 	glxewInit();
@@ -253,5 +210,4 @@ int main(int argc, char **argv) {
 
 	return 0;
 }
-
 
