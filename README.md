@@ -3,7 +3,7 @@ ElectroBench is a GLSL 1.2 + C++ based benchmark for Debian-based Linux PCs, It 
 
 # Technical informations about ElectroBench: 
 
-ElectroBench has 10 versions, each of them use a *specific* lighting effect : v1.0 uses Toon, v1.1 uses Directional Light Per Pixel, v1.2 uses Point Light Per Pixel, v1.3 uses Point Light Per Pixel + Toon, v1.4 uses Phong + Rim lighting, v1.5 uses Phong + Rim + Toon lighting, v1.6 uses Blinn-Phong + Rim + Shadows, v1.7 uses Blinn-Phong + Toon + Shadows, v1.8 uses Blinn-Phong + Toon + Rim + Shadows and v1.9 uses Blinn-Phong + Rim + Toon + Fire effect.
+ElectroBench has 10 versions, each of them use a *specific* lighting effect : v1.0 uses Toon, v1.1 uses Directional Light Per Pixel, v1.2 uses Point Light Per Pixel, v1.3 uses Point Light Per Pixel + Toon, v1.4 uses Phong + Rim lighting, v1.5 uses Phong + Rim + Toon lighting, v1.6 uses Blinn-Phong + Rim + Shadows, v1.7 uses Blinn-Phong + Toon + Shadows, v1.8 uses Blinn-Phong + Toon + Rim + Shadows, v1.9 uses Blinn-Phong + Rim + Toon + Fire effect and v2.0 uses Blinn-Phong + Shadows + Rim + Toon + Fire effect.
 
 I'm gonna first explain some of the effects that are in this project : 
 
@@ -37,6 +37,16 @@ The programming languages used are **C++** for the *main* code, **GLSL 1.2 (Open
 
 **Compilation of this project:**
 From v1.0 to v1.5, The project used CMake for building but from v1.6-beta+, we used a 2-step manual compilation, it generates LLVM IR to a file and then compiles and links that IR.
+
+# Complexified breaking changes
+
+In these updated commits (v1.7-Beta+) so many breaking changes were used to make the benchmark more complex, Here are some of these changes :
+
+***Resolution :*** Resolution was changed from 1280x1024 to 2K (2560x1440) to maximize the rendered content.
+
+***Effects :*** From v1.7 onwards, Multiple lighting sources were used, Furthermore, Lambertian effects were added to all the versions, and shadows were included to all lighting sources in addition to the lighting components and effects.
+
+***Multiple ways to handle light sources :*** In v1.8-Beta we used in the vertex shader an varying vec3 array called ```varying vec3 vLight[20]```, and we looped over thaat variable 5 times with the index i moving up at each loop, until 20 was reached, i was the number that was putted in the ```gl_LightSource[i]``` structure and we add that structure in the array and pass it to the fragment shader. For other versions, The computation of light sources was using plain vectors that were assigned to variables (*and for 20 light sources, It was so much*).
 
 # How to execute this project ?
 It's so simple, just follow the instructions for the versions you want to execute :
