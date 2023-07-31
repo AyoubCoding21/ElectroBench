@@ -20,8 +20,9 @@ main() {
                 echo -e "\e[1;33m${bold}Setting up...\e[0m";
                 sudo rm -f ./libglut-dev_3.4.0-1_amd64.deb
                 sudo rm -f ./libglut3.12_3.4.0-1_amd64.deb
+        else
+                echo -e "\e[1;32m${bold}Skipping installing packages...\e[0m";
         fi
-        echo -e "\e[1;32m${bold}Skipping installing packages...\e[0m";
         if [ -d build/ ]
         then
                 sleep 1s

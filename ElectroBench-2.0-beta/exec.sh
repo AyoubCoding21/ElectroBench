@@ -1,4 +1,3 @@
-#!/bin/bash
 main() {
         local text="$1"
         local delay="$2"
@@ -47,4 +46,4 @@ main() {
                 echo -e "\e[1;31m${bold}Errors occured ! See output above.\e[0m"
         fi
 }
-main "ElectroBench v1.7-beta" 0.5
+main "ElectroBench v2.0-beta" 0.5

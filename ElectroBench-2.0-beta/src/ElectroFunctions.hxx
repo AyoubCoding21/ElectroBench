@@ -7,7 +7,7 @@
 #include <string>
 #include <cstring>
 #include <iostream>
-#define HEIGHT 1440
+#define HEIGHT 1440 
 #define WIDTH 2560
 #define NAME "ElectroBench"
 using namespace std;
@@ -16,7 +16,7 @@ float a = 0;
 float b = 0;
 double frame=0,timet=0,timebase=0,fps=0,ft=0;
 float lpos[4] = {1.2540,0.5525420,1.023453,0.5};
-char *textFileRead(char *filename)
+inline char *textFileRead(char *filename)
 {
     
 	FILE *fp;
@@ -43,7 +43,7 @@ char *textFileRead(char *filename)
 	}
 	return content;
 }
-void changeSize(int w, int h) {
+inline void changeSize(int w, int h) {
 	if(h == 0)
 		h = 1;
 
@@ -55,7 +55,7 @@ void changeSize(int w, int h) {
 	gluPerspective(45,ratio,1,100);
 	glMatrixMode(GL_MODELVIEW);
 }
-void renderScene(void)
+inline void renderScene(void)
 {
 	frame++;
 	timet = glutGet(GLUT_ELAPSED_TIME);
@@ -86,12 +86,12 @@ void renderScene(void)
 
 	glutSwapBuffers();
 }
-void processKeys(unsigned char key, int x, int y) {
+inline void processKeys(unsigned char key, int x, int y) {
 	if (key == 27) 
 		std::exit(0);
 }
 #define printOpenGLError() printGLError(__FILE__, __LINE__)
-int printGLError(char *file, int line)
+inline int printGLError(char *file, int line)
 {
     GLenum glErr;
     int    retCode = 0;
@@ -105,7 +105,7 @@ int printGLError(char *file, int line)
     }
     return retCode;
 }
-void printShaderInfoLog(GLuint object)
+inline void printShaderInfoLog(GLuint object)
 {
     int infologLength = 0;
     int charsWritten  = 0;
@@ -121,7 +121,7 @@ void printShaderInfoLog(GLuint object)
         free(infoLog);
     }
 }
-void printProgramInfoLog(GLuint object)
+inline void printProgramInfoLog(GLuint object)
 {
     int infologLength = 0;
     int charsWritten  = 0;
@@ -137,7 +137,7 @@ void printProgramInfoLog(GLuint object)
         free(infoLog);
     }
 }
-void setShaders() 
+inline void setShaders() 
 {
 
 	char *vs = NULL,*fs = NULL;
