@@ -48,6 +48,8 @@ In these updated commits (v1.7-Beta+) so many breaking changes were used to make
 
 ***Multiple ways to handle light sources :*** In v1.8-Beta we used in the vertex shader an varying vec3 array called ```varying vec3 vLightDir[20]```, and we looped over thaat variable 5 times with the index i moving up at each loop, until 20 was reached, i was the number that was putted in the ```gl_LightSource[i]``` structure and we add that structure in the array and pass it to the fragment shader. For other versions, The computation of light sources was using plain vectors that were assigned to variables (*and for 20 light sources, It was so much*).
 
+***Mathematical complexity :*** In v2.0-Beta I used a noise4D generator to generate pseudo-random numbers directly on the GPU, based on the simplex noise  
+
 # How to execute this project ?
 It's so simple, just follow the instructions for the versions you want to execute :
 
@@ -150,7 +152,17 @@ cd ElectroBench/ElectroBench-1.9-beta/
 chmod u+x ./exec.sh && bash ./exec.sh
 ```
 
-**Note**: It's recommended using v1.6-Beta+
+
+*v2.0-Beta:*
+
+```sh
+sudo apt install git -y --no-install-recommends
+git clone https://github.com/AyoubCoding21/ElectroBench/
+cd ElectroBench/ElectroBench-2.0-beta/
+chmod u+x ./exec.sh && bash ./exec.sh
+```
+
+**Note**: It's recommended using v1.7-Beta+
 
 # Questions or misunderstanding or pull requests
 
