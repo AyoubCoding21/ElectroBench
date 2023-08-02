@@ -172,6 +172,6 @@ Who has a question or didn't understand something or has an issue, he emails me 
 
 **Note**: For most of my projects I use a Galaxy A2-Core and for limited periods of time, and also I use a 2007 PC without GPU and with 2 GB of RAM to build these projects, so if you want to support my work, consider donating.
 
-**Note**: For donation, message me at the same email.
+**Donation (Payeer) :** ```P1098557175```
 
 Cya !!
