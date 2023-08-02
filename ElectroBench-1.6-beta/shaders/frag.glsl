@@ -119,24 +119,24 @@ void main()
         vec3(3.0, 1.0, -2.0),
         vec3(-4.0, 1.0, -3.0),
         vec3(2.0, 3.0, 1.0),
-	    vec3(snoise(vec3(.0548587)), 3.5878, 3.558),
-	    vec3(2.265565, 6.5558, 1.55885),
-	    vec3(2.5878, 5.89, 6.8),
-	    vec3(3.688, 2.414, 9.55),
-	    vec3(2.645788, snoise(vec3(2.414)), snoise(vec3(pow(9.556895, dot(.98845, .6898)))))
+	vec3(snoise(vec3(.0548587)), 3.5878, 3.558),
+	vec3(2.265565, 6.5558, 1.55885),
+	vec3(2.5878, 5.89, 6.8),
+	vec3(3.688, 2.414, 9.55),
+	vec3(2.645788, snoise(vec3(2.414)), snoise(vec3(pow(9.556895, dot(.98845, .6898)))))
     );
 
     vec3 lightColors[10] = vec3[10](
-        vec3(1.0, 0.0, 0.0),
-        vec3(0.0, 1.0, 0.0),
-        vec3(0.0, 0.0, 1.0),
-        vec3(1.0, 1.0, 0.0),
+        vec3(1.0, 0.2, 0.0),
+        vec3(0.4, 1.0, 0.0),
+        vec3(0.9, 0.6, 0.0),
+        vec3(0.23, 0.5, 1.0),
         vec3(1.0, 0.0, 1.0),
     	vec3(snoise(vec3(.0548587)), 3.5878, 3.558),
-	    vec3(2.265565, 6.5558, 1.55885),
-	    vec3(2.985, 8.89, 1.8),
-	    vec3(3.688, 2.414, 9.55),
-	    vec3(2.645788, snoise(vec3(2.414)), snoise(vec3(pow(9.556895, dot(.98845, .6898)))))
+	vec3(2.265565, 6.5558, 1.55885),
+	vec3(2.985, 8.89, 1.8),
+	vec3(3.688, 2.414, 9.55),
+	vec3(9.645788, snoise(vec3(2.414)), snoise(vec3(pow(1.556895, dot(.98845, .6898)))))
     );
 
     vec3 totalLighting = vec3(0.0);
@@ -146,12 +146,12 @@ void main()
         float intensity = max(dot(vNormal, halfwayDir), 0.0);
         vec3 diffuse = lightColors[i];
         vec3 specular = vec3(1.0);
-        float shininess = 32.0;
+        float shininess = 128.0;
         vec3 lighting = diffuse * intensity + specular * pow(intensity, shininess);
         totalLighting += lighting;
     }
 
-    float rimStrength = 0.5;
+    float rimStrength = 0.7;
     float rimThreshold = 0.2;
     float rim = rimStrength * max(0.0, 1.0 - dot(vNormal, vViewDir));
     vec3 rimColor = vec3(1.0, 0.2824, 0.0);
