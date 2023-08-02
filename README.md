@@ -33,12 +33,10 @@ The vertex and fragment shaders in ElectroBench (*v1.1+*) uses a bi-directionnal
 
 **Programming languages used:**
 
-The programming languages used are **C++** for the *main* code, **GLSL 1.2 (OpenGL 2.1)** for shaders and **Shell and CMake** for execution and building.
-
-**Note**: CMake wasn't used from v1.6-Beta and higher.
+The programming languages used are **C++** for the *main* code, **GLSL 1.2 (OpenGL 2.1)** for shaders and **Shell** for execution and building.
 
 **Compilation of this project:**
-From v1.0 to v1.5, The project used CMake for building but from v1.6-beta+, we used a 2-step manual compilation, it generates LLVM IR to a file and then compiles and links that IR.
+We used a 2-step manual compilation, it generates LLVM IR to a file and then compiles and links that IR.
 
 # Complexified breaking changes
 
@@ -48,7 +46,10 @@ In these updated commits (v1.7-Beta+) so many breaking changes were used to make
 
 ***Effects :*** From v1.7 onwards, Multiple lighting sources were used, Furthermore, Lambertian effects were added to all the versions, and shadows were included to all lighting sources in addition to the lighting components and effects.
 
-***Multiple ways to handle light sources :*** In v1.8-Beta we used in the vertex shader an varying vec3 array called ```varying vec3 vLightDir[20]```, and we looped over thaat variable 5 times with the index i moving up at each loop, until 20 was reached, i was the number that was putted in the ```gl_LightSource[i]``` structure and we add that structure in the array and pass it to the fragment shader. For other versions, The computation of light sources was using plain vectors that were assigned to variables (*and for 20 light sources, It was so much*).
+***Multiple ways to handle light sources :*** In v1.8-Beta we used in the vertex shader an varying vec3 array called ```varying vec3 vLightDir[20]```, and we looped over thaat variable 5 times with the index i moving up at each loop, until 20 was reached, i was the number that was putted in the ```gl_LightSource[i]``` structure and we add that structure in the array and pass it to the fragment shader. For other versions, The computation of light sources was using plain vectors that were assigned to variables (*and for 20 light sources, It was so much*). But in v1.6, We used Simplex Noise to create a procedural texture and then we used an array to store 10 lights and 10 color lights and modified the snoise function to support vec3 instead of vec4 in the original. The structure of the lightsources should look like this:
+```cpp
+
+```
 
 ***Mathematical complexity :*** In v2.0-Beta I used a noise4D generator to generate pseudo-random numbers directly on the GPU, based on the simplex noise and then passes those values to the positions of the lighting sources. That passes it also to the shadows, which their positions are the opposite of the lights.
 
