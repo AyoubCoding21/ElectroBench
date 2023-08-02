@@ -6,8 +6,8 @@
 #include <string>
 #include <cstring>
 #include <iostream>
-#define HEIGHT 1024
-#define WIDTH 1280
+#define HEIGHT 1440
+#define WIDTH 2560
 #define NAME "ElectroBench"
 using namespace std;
 GLuint vert, frag, program;
