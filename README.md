@@ -29,6 +29,12 @@ I'm gonna first explain some of the effects that are in this project :
 
 Perlin noise works by generating a grid of random gradient vectors and then interpolating them to create a smooth continuous function across the grid.
 
+**Lambertian effect :** The Lambertian shadowing effect refers to the way light interacts with a surface that has a Lambertian (diffuse) reflection model when it is placed in the presence of other objects or occluders.
+
+When a light source illuminates a scene, the Lambertian shading model is used to determine the brightness of a point on a surface based on the angle between the incoming light direction and the surface normal. However, in the presence of other objects, the amount of light reaching a point on the surface can be reduced if it is partially or completely blocked by other objects. This is what creates the shadowing effect. The formula of the Lambertian effect is based on the cosine law, The formula can be represented as :
+
+```I = I₀ * kd * cos(θ)```
+
 **Rendering:**
 
 The project renders a teapot, then uses shaders to apply the effects on it, with the help of some attributes mentionned in the main.cxx file.
