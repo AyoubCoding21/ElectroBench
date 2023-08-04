@@ -248,6 +248,15 @@ void main()
     vec3 E = normalize(-vViewDir);
     vec3 finalColor = ambientColor;
     vec3 fireColor = fireTexture(vTexCoord);
+    float d = length(vTexCoord - vec2(0.5));
+    vec3 colorOffset = vec3(d * 1.5, d * 0.5, d * 2.0);
+    finalColor += colorOffset;
+    float redOffset = sin(vTexCoord.x * 12.0) * 0.6;
+    float greenOffset = cos(vTexCoord.y * 5.0) * 0.8;
+    float blueOffset = sin(vTexCoord.x * vTexCoord.y * 50.0) * 0.1;
+    finalColor += vec3(redOffset, greenOffset, blueOffset);
+    finalColor = mix(finalColor, vec3(0.6), 0.2);
+    finalColor = pow(finalColor, vec3(0.2, 0.8, 1.0));
     float blendFactor1 = 0.5;
     float blendFactor2 = 0.6;
     float blendFactor3 = 0.2;
