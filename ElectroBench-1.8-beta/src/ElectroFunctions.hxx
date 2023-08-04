@@ -1,6 +1,6 @@
 #pragma once
 #include <GL/glew.h>
-#include <GL/glut.h>
+#include <GL/freeglut.h>
 #include <GL/glxew.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,7 +16,7 @@ float a = 0;
 float b = 0;
 double frame=0,timet=0,timebase=0,fps=0,ft=0;
 float lpos[4] = {1.2540,0.5525420,1.023453,0.5};
-char *textFileRead(char *filename)
+inline char *textFileRead(char *filename)
 {
     
 	FILE *fp;
@@ -76,6 +76,7 @@ void renderScene(void)
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
         glCullFace(GL_FRONT);
+        glHint(GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
 	glLoadIdentity();
 	gluLookAt(0.0,5.0,5.0, 
 		      0.0,0.0,0.0,
