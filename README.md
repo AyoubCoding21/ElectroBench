@@ -3,7 +3,7 @@ ElectroBench is a GLSL 1.2 + C++ based benchmark for Debian-based Linux PCs, It 
 
 # Technical informations about ElectroBench: 
 
-ElectroBench has 4 versions, each of them use a *specific* lighting effect : v1.6 uses Blinn-Phong + Rim + Shadows, v1.7 uses Blinn-Phong + Toon + Shadows, v1.8 uses Blinn-Phong + Toon + Rim + Shadows, and v2.0 uses Blinn-Phong + Shadows + Rim + Toon + Fire effect.
+ElectroBench has 4 versions, each of them use a *specific* lighting effect : v1.6 uses Blinn-Phong + Rim + Shadows, v1.7 uses Blinn-Phong + Toon + Shadows, v1.8 uses Blinn-Phong + Toon + Rim + Shadows, and v2.0 uses Blinn-Phong + Shadows + Rim + Toon + Shadows Upgraded.
 
 **Note : v1.0, v1.1, v1.2, v1.3, v1.4, v1.5 and v1.9 are deprecated for non-complexity.**
 
@@ -11,15 +11,17 @@ I'm gonna first explain some of the effects that are in this project :
 
 **Toon** : It gives the object a cartoon-like appearance.
 
-**Phong** : It's like Point Light but it uses lighting components (diffuse, specular, ambient and shininess).
+**Phong** : The Phong reflection model (Created *mathematically* in 1975 by Bui Tuong Phong) is widely used in computer graphics, The Phong reflection model combines three components (ambient, diffuse and specular) to calculate the color and intensity of light reflected from a surface to the viewer's eye or the camera.  
 
 **Rim** : Rim is a lighting effect that gives glow to an object.
 
-**Blinn-Phong**: Blinn-Phong is a *mathematically* optimised superset of Phong. It uses 2 lighting components (diffuse and specular).
+**Blinn-Phong**: Blinn-Phong is a *mathematically* optimised superset of Phong. Instead of calculating the specular reflection using a reflection vector (sometimes called R), The Blinn-Phong model uses a halfway vector between the viewer's direction and the light direction instead of the reflection vector. The halfway vector is computed as the normalized sum of the light vector and the view vector (the vector pointing from the surface point to the viewer's eye).
 
 **Shadows**: Shadows in this benchmark are used by calculating clamp to dot of the vPositon and vNormal of the light then multipling it by the color, It was used in v1.8-Beta, but in other versions it uses shadow-mapping. 
 
-**Fire effect**: For this *virtual* fire effect we addded a sin distortion effect to the calculations. And we used a *degrade* color system for bottom to top (from yellow to red).
+**Procedural texture :** In all of these versions, we used a different type of texture called procedural texture we don't use ```sampler3D``` types, but instead, we used different kinds of noises (like noise4D, perlin noise, FBM...) + effects that are written procedurally (we don't use sth like ```texture2D();``` functions).
+
+**Blending texture :** In our ElectroBench versions, We use texture-blending, Which is combining textures to produce an effect that combines all of these textures, in v2.0 it was used, but not as intensive as we thought. It blended 3 different textures.
 
 **Rendering:**
 
