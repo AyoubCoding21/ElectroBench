@@ -29,10 +29,6 @@ I'm gonna first explain some of the effects that are in this project :
 
 Perlin noise works by generating a grid of random gradient vectors and then interpolating them to create a smooth continuous function across the grid.
 
-**FBM :** FBM stands for "Fractal Brownian Motion," and it is a technique commonly used in procedural texture generation to create natural and complex textures. It is based on the principle of layering multiple noise functions together to achieve a more realistic and detailed result. Simplex noise, developed by Ken Perlin as an improvement over his original Perlin noise, is one of the noise functions often used in FBM due to its efficiency and improved visual quality.	
-
-To create FBM with Simplex noise, you start with a single octave of Simplex noise. This octave determines the base pattern of the texture. The noise values generated typically range between -1 and 1.
-
 **Rendering:**
 
 The project renders a teapot, then uses shaders to apply the effects on it, with the help of some attributes mentionned in the main.cxx file.
