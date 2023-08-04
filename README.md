@@ -25,6 +25,10 @@ I'm gonna first explain some of the effects that are in this project :
 
 **Ambient occulsion :** Ambient occlusion (AO) is a shading and rendering technique used in computer graphics to simulate the soft shadows and subtle darkening that occur in crevices, cracks, and tight spaces where ambient light has difficulty reaching. It is a form of global illumination, which means it takes into account the indirect lighting in a scene.
 
+**Perlin noise :** Perlin noise is a procedural texture generation technique commonly used in computer graphics and game development to create natural-looking textures with organic variations. It was invented by Ken Perlin and has become widely popular due to its ability to produce visually pleasing patterns that resemble natural phenomena like clouds, terrains, and marble.
+
+Perlin noise works by generating a grid of random gradient vectors and then interpolating them to create a smooth continuous function across the grid.
+
 **Rendering:**
 
 The project renders a teapot, then uses shaders to apply the effects on it, with the help of some attributes mentionned in the main.cxx file.
