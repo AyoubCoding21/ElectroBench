@@ -19,9 +19,9 @@ I'm gonna first explain some of the effects that are in this project :
 
 **Shadows**: Shadows in this benchmark are used by calculating clamp to dot of the vPositon and vNormal of the light then multipling it by the color, It was used in v1.8-Beta, but in other versions it uses shadow-mapping. 
 
-**Procedural texture :** In all of these versions, we used a different type of texture called procedural texture we don't use ```sampler3D``` types, but instead, we used different kinds of noises (like noise4D, perlin noise, FBM...) + effects that are written procedurally (we don't use sth like ```texture2D();``` functions).
+**Procedural texture :** In all of these versions, we used a different type of texture called procedural texture we don't use ```sampler3D``` types, but instead, we used different kinds of noises (like noise4D, perlin noise, FBM...) + effects that are written procedurally (we don't use sth like ```texture2D()``` functions).
 
-**Blending texture :** In our ElectroBench versions, We use texture-blending, Which is combining textures to produce an effect that combines all of these textures, in v2.0 it was used, but not as intensive as we thought. It blended 3 different textures.
+**Blending texture :** In our ElectroBench versions, We use texture-blending, Which is combining textures to produce an effect that combines all of these textures, in v2.0 it was used, but not as intensive as we thought. It blended 3 different textures. A wooden-like texture + brick-wall-like texture + fire texture.
 
 **Rendering:**
 
