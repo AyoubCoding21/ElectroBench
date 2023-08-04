@@ -86,6 +86,8 @@ vec3 lightColors[10] = vec3[10](
 
 ***Mathematical complexity :*** In v2.0-Beta I used a noise4D generator to generate pseudo-random numbers directly on the GPU, based on the simplex noise and then passes those values to the positions of the lighting sources. That passes it also to the shadows, which their positions are the opposite of the lights. And in v1.8, I used Perlin noise with a transparent touch. And in v1.6->1.7 I used Simplex noise.
 
+***Procedural textures :*** To make textures in our projects, We used noising algorithms like Perlin noise, Simplex noise, 4D/3D noise and FBM noise, then 
+
 # How to execute this project ?
 It's so simple, just follow the instructions for the versions you want to execute :
 
