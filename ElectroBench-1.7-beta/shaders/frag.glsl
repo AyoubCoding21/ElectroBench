@@ -2,8 +2,165 @@
 varying vec3 vNormal;
 varying vec3 vPosition;
 
-void main()
-{
+
+vec4 mod289(vec4 x) {
+    return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+
+float mod289(float x) {
+    return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+
+vec4 permute(vec4 x) {
+    return mod289(((x * 34.0) + 10.0) * x);
+}
+
+float permute(float x) {
+    return mod289(((x * 34.0) + 10.0) * x);
+}
+
+vec4 taylorInvSqrt(vec4 r) {
+    return 1.79284291400159 - 0.85373472095314 * r;
+}
+
+float taylorInvSqrt(float r) {
+    return 1.79284291400159 - 0.85373472095314 * r;
+}
+
+vec4 grad4(float j, vec4 ip) {
+    const vec4 ones = vec4(1.0, 1.0, 1.0, -1.0);
+    vec4 p, s;
+
+    p.xyz = floor(fract(vec3(j) * ip.xyz) * 7.0) * ip.z - 1.0;
+    p.w = 1.5 - dot(abs(p.xyz), ones.xyz);
+    s = vec4(lessThan(p, vec4(0.0)));
+    p.xyz = p.xyz + (s.xyz * 2.0 - 1.0) * s.www;
+
+    return p;
+}
+
+#define F4 0.309016994374947451
+float snoise(vec3 v) {
+    const vec2 C = vec2(1.0 / 6.0, 1.0 / 3.0);
+    const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+
+    vec3 i = floor(v + dot(v, C.yyy));
+    vec3 x0 = v - i + dot(i, C.xxx);
+    vec3 g = step(x0.yzx, x0.xyz);
+    vec3 l = 1.0 - g;
+    vec3 i1 = min(g.xyz, l.zxy);
+    vec3 i2 = max(g.xyz, l.zxy);
+
+    vec3 x1 = x0 - i1 + C.xxx;
+    vec3 x2 = x0 - i2 + C.yyy;
+    vec3 x3 = x0 - D.yyy;
+
+    i = mod(i, 289.0);
+    vec4 p = permute(permute(permute(i.z + vec4(0.0, i1.z, i2.z, 1.0))
+                                 + i.y + vec4(0.0, i1.y, i2.y, 1.0))
+                         + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+
+    float n_ = 1.0 / 7.0;
+    vec3 ns = n_ * D.wyz - D.xzx;
+
+    vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+    vec4 x_ = floor(j * ns.z);
+    vec4 y_ = floor(j - 7.0 * x_);
+    vec4 x = x_ * ns.x + ns.yyyy;
+    vec4 y = y_ * ns.x + ns.yyyy;
+    vec4 h = 1.0 - abs(x) - abs(y);
+
+    vec4 b0 = vec4(x.xy, y.xy);
+    vec4 b1 = vec4(x.zw, y.zw);
+
+    vec4 s0 = floor(b0) * 2.0 + 1.0;
+    vec4 s1 = floor(b1) * 2.0 + 1.0;
+    vec4 sh = -step(h, vec4(0.0));
+
+    vec4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;
+    vec4 a1 = b1.xzyw + s1.xzyw * sh.zzww;
+
+    vec3 p0 = vec3(a0.xy, h.x);
+    vec3 p1 = vec3(a0.zw, h.y);
+    vec3 p2 = vec3(a1.xy, h.z);
+    vec3 p3 = vec3(a1.zw, h.w);
+
+    vec4 norm = taylorInvSqrt(vec4(dot(p0, p0), dot(p1, p1), dot(p2, p2), dot(p3, p3)));
+    p0 *= norm.x;
+    p1 *= norm.y;
+    p2 *= norm.z;
+    p3 *= norm.w;
+
+    vec4 m = max(0.6 - vec4(dot(x0, x0), dot(x1, x1), dot(x2, x2), dot(x3, x3)), 0.0);
+    m = m * m;
+    return 42.0 * dot(m * m, vec4(dot(p0, x0), dot(p1, x1), dot(p2, x2), dot(p3, x3)));
+}
+float fbm(vec3 v) {
+    float value = 0.0;
+    float amplitude = 0.5;
+    vec3 p = v;
+    for (int i = 0; i < 5; i++) {
+        value += amplitude * snoise(p);
+        p *= 2.0;
+        amplitude *= 0.5;
+    }
+    return value;
+}
+
+vec3 proceduralTexture(vec2 uv, float timeFactor) {
+    uv = fract(uv);
+    if (mod(floor(uv.x * 2.0), 2.0) == 1.0)
+        uv.x = 1.0 - uv.x;
+    if (mod(floor(uv.y * 2.0), 2.0) == 1.0)
+        uv.y = 1.0 - uv.y;
+    vec3 color1 = vec3(1.0, 0.11, 0.02);
+    vec3 color2 = vec3(0.96, 0.11, 0.03);
+    vec3 color3 = vec3(0.96, 0.02, 0.02);
+    vec3 color4 = vec3(0.90, 0.24, 0.1);
+    float patternSelector = mod(timeFactor * 2.0, 1.0);
+    vec3 textureColor;
+
+    // Use Fractional Brownian Motion (FBM) for more complex noise
+    float fbmValue1 = fbm(vec3(uv * 10.0, timeFactor * 0.5));
+    float fbmValue2 = fbm(vec3(uv * 10.0, timeFactor));
+    float fbmValue3 = fbm(vec3(uv * 10.0, timeFactor * 1.5));
+
+    float noiseValue1 = 0.0;
+    for (int i = 0; i < 15; i++) {
+        float t = timeFactor * float(i) * 0.1;
+        noiseValue1 += snoise(vec3(uv * 10.0, t)) + fbmValue1;
+    }
+    noiseValue1 /= 10.0;
+
+    float noiseValue2 = 0.0;
+    for (int i = 0; i < 10; i++) {
+        float t = timeFactor * float(i) * 0.2;
+        noiseValue2 += snoise(vec3(uv * 10.0, t)) + fbmValue2;
+    }
+    noiseValue2 /= 10.0;
+
+    float noiseValue3 = 0.0;
+    for (int i = 0; i < 10; i++) {
+        float t = timeFactor * float(i) * 0.3;
+        noiseValue3 += snoise(vec3(uv * 10.0, t)) + fbmValue3;
+    }
+    noiseValue3 /= 10.0;
+
+    float mixAmount1 = mix(noiseValue1, noiseValue2, timeFactor);
+    float mixAmount2 = mix(noiseValue3, noiseValue2, timeFactor);
+
+    textureColor = mix(mix(color1, color2, mixAmount1), color3, mixAmount1);
+    textureColor += mix(textureColor, color4, mixAmount2);
+
+    return textureColor;
+}
+
+void main() {
+    vec2 uv = gl_FragCoord.xy / vec2(7850.0, 4320.0);
+    float time = mod(gl_FragCoord.x + gl_FragCoord.y + gl_FragCoord.z + gl_FragCoord.w, 289.0);
+    float timeFactor = 0.5 + 0.5 * sin(time * 0.1);
+
+    vec3 textureColor = proceduralTexture(uv, timeFactor);
     vec3 lightDir1 = normalize(vec3(0.52898938, 0.6386788, 0.35623453));
     vec3 lightDir2 = normalize(vec3(-0.85446, 0.98786672, -0.3375325));
     vec3 lightDir3 = normalize(vec3(0.0706325, 0.25283, 0.2452452));
@@ -16,41 +173,41 @@ void main()
     vec3 lightDir10 = normalize(vec3(-0.86778, 0.768678, -0.070678387));
     vec3 viewDir = normalize(-vPosition);
     vec3 viewDir2 = normalize(-vPosition);
-    float intensity1 = max(dot(vNormal, normalize(lightDir1 + viewDir)), 0.0);
-    vec3 diffuse1 = vec3(0.0235, 0.3451, 0.9412);
-    vec3 lighting1 = diffuse1 * intensity1;
-    float intensity2 = max(dot(vNormal, normalize(lightDir2 + viewDir)), 0.0);
+    float lambertian1 = max(dot(vNormal, lightDir1), 0.0);
+    vec3 diffuse1 = vec3(0.9235, 0.5451, 0.0412);
+    vec3 lighting1 = diffuse1 * lambertian1;
+    float lambertian2 = max(dot(vNormal, lightDir2), 0.0);
     vec3 diffuse2 = vec3(0.9412, 0.3451, 0.0235);
-    vec3 lighting2 = diffuse2 * intensity2;
-    float intensity3 = max(dot(vNormal, normalize(lightDir3 + viewDir)), 0.0);
-    vec3 diffuse3 = vec3(0.5275, 0.486, .00154835);
-    vec3 lighting3 = diffuse3 * intensity3;
-    float intensity4 = max(dot(vNormal, normalize(lightDir4 + viewDir)), 0.0);
-    vec3 diffuse4 = vec3(0.9412, 0.338, 0.05420);
-    vec3 lighting4 = diffuse4 * intensity4;
-    float intensity5 = max(dot(vNormal, normalize(lightDir5 + viewDir)), 0.0);
-    vec3 diffuse5 = vec3(0.9452412, 0.345451, 0.045345244444435);
-    vec3 lighting5 = diffuse5 * intensity5;
-    float intensity6 = max(dot(vNormal, normalize(lightDir6 + viewDir)), 0.0);
-    vec3 diffuse6 = vec3(0.45987278, 0.24, 0.0452444444235);
-    vec3 lighting6 = diffuse6 * intensity6;
-    float intensity7 = max(dot(vNormal, normalize(lightDir7 + viewDir)), 0.0);
-    vec3 diffuse7 = vec3(0.6875783387888878, 0.34537584335327855644, 0.0537687327353);
-    vec3 lighting7 = diffuse7 * intensity7;
-    float intensity8 = max(dot(vNormal, normalize(lightDir8 + viewDir)), 0.0);
+    vec3 lighting2 = diffuse2 * lambertian2;
+    float lambertian3 = max(dot(vNormal, lightDir3), 0.0);
+    vec3 diffuse3 = vec3(0.5275, 0.2586, .0000154835);
+    vec3 lighting3 = diffuse3 * lambertian3;
+    float lambertian4 = max(dot(vNormal, lightDir4), 0.0);
+    vec3 diffuse4 = vec3(0.9412, 0.538, 0.000005420);
+    vec3 lighting4 = diffuse4 * lambertian4;
+    float lambertian5 = max(dot(vNormal, lightDir5), 0.0);
+    vec3 diffuse5 = vec3(0.9452412, 0.4345451, 0.00045345244444435);
+    vec3 lighting5 = diffuse5 * lambertian5;
+    float lambertian6 = max(dot(vNormal, lightDir6), 0.0);
+    vec3 diffuse6 = vec3(0.45987278, 0.24, 0.000452444444235);
+    vec3 lighting6 = diffuse6 * lambertian6;
+    float lambertian7 = max(dot(vNormal, lightDir7), 0.0);
+    vec3 diffuse7 = vec3(0.5875783387888878, 0.34537584335327855644, 0.00537687327353);
+    vec3 lighting7 = diffuse7 * lambertian7;
+    float lambertian8 = max(dot(vNormal, lightDir8), 0.0);
     vec3 diffuse8 = vec3(0.986873, 0.355644, 0.000045245);
-    vec3 lighting8 = diffuse8 * intensity8;
-    float intensity9 = max(dot(vNormal, normalize(lightDir9 + viewDir)), 0.0);
+    vec3 lighting8 = diffuse8 * lambertian8;
+    float lambertian9 = max(dot(vNormal, lightDir9), 0.0);
     vec3 diffuse9 = vec3(0.8848, 0.355644, 0.020000);
-    vec3 lighting9 = diffuse9 * intensity9;
-    float intensity10 = max(dot(vNormal, normalize(lightDir10 + viewDir)), 0.0);
-    vec3 diffuse10 = vec3(0.252, 0.102, 0.00002543453);
-    vec3 lighting10 = diffuse10 * intensity10;
+    vec3 lighting9 = diffuse9 * lambertian9;
+    float lambertian10 = max(dot(vNormal, lightDir10), 0.0);
+    vec3 diffuse10 = vec3(0.252, 0.0902, 0.00002543453);
+    vec3 lighting10 = diffuse10 * lambertian10;
     vec3 lighting = lighting1 + lighting2 + lighting3
      + lighting4 + lighting5 
      + lighting6 + lighting7
      + lighting8 + lighting9 + lighting10;
-    vec3 specular = vec3(0.9059, 0.6471, 0.0471);
+    vec3 specular = vec3(0.9059, 0.2471, 0.0471);
     float shininess = 128.0;
     vec3 halfwayDir1 = normalize(lightDir1 + lightDir3 + lightDir5 + lightDir7 + lightDir9 + viewDir);
     vec3 halfwayDir2 = normalize(lightDir2 + lightDir4 + lightDir6 + lightDir8 + lightDir10 + viewDir2);
@@ -58,9 +215,27 @@ void main()
     float intensitySpec2 = max(dot(vNormal, halfwayDir2), 0.0);
     lighting += specular * (pow(intensitySpec1, shininess) + pow(intensitySpec2, shininess));
     float toonLevels = 4.0;
-    float toonIntensity = floor(max(max(intensity1, intensity2), 0.0) * toonLevels) / toonLevels;
-    vec3 toonColor = vec3(0.83, 0.27, 0.03); 
+    float toonIntensity = floor(max(max(intensitySpec1, intensitySpec2), 0.0) * toonLevels) / toonLevels;
+    vec3 toonColor = vec3(0.953, 0.27, 0.03);
     vec3 finalColor = mix(toonColor, lighting, toonIntensity);
 
+    vec3 bloom = vec3(0.0);
+    for (int i = 0; i < 5; i++) {
+        float bloomAmount = 0.5 * fbm(vec3(uv * 5.0, time * 0.2 + float(i) * 0.3));
+        bloom += bloomAmount * lighting;
+    }
+    finalColor += bloom;
+    vec3 color = vec3(0.98, 0.09, 0.09);
+    finalColor += textureColor * color;
+    float ao = 1.0 - snoise(vec3(uv * 5.0, time * 0.1));
+    finalColor += ao;
+    float shadowNoise = fbm(vec3(uv * 100.0, 3.0));
+    vec3 shadowColor = vec3(0.12, 0.0, 0.0);
+    float shadowIntensity = 0.2 + shadowNoise * 0.3;
+    finalColor *= mix(lighting, shadowColor, shadowIntensity);
+    float vignetteStrength = 0.3;
+    float vignetteSize = 0.7;
+    float vignette = 1.0 - length(uv - vec2(0.5)) * vignetteSize;
+    finalColor *= mix(1.0, vignetteStrength, vignette);
     gl_FragColor = vec4(finalColor, 1.0);
 }

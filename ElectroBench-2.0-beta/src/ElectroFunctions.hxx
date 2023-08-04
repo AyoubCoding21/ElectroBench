@@ -67,12 +67,15 @@ inline void renderScene(void)
 		ft = 1/fps;
 		std::string str_fps = std::to_string(fps);
 		std::string str_ft = std::to_string(ft);
-		std::string title = "FPS : " + str_fps + " / Frametime : " + str_ft;
+		std::string title = "FPS : " + str_fps + " / Frametime : " + str_ft + "s";
 		glutSetWindowTitle(title.c_str());
 	}
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_MULTISAMPLE);
+        glEnable(GL_MULTISAMPLE);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_FRONT);
 
 	glLoadIdentity();
 	gluLookAt(0.0,5.0,5.0, 
@@ -168,6 +171,6 @@ inline void setShaders()
 
 	glLinkProgram(program);
 	printProgramInfoLog(program);
-
 	glUseProgram(program);
+
 }

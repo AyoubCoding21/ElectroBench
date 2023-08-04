@@ -10,11 +10,11 @@
 #define WIDTH 2560
 #define NAME "ElectroBench"
 using namespace std;
-GLuint vert, frag, program;
-float a = 0;
-float b = 0;
-double frame=0,timet=0,timebase=0,fps=0,ft=0;
-float lpos[4] = {1.2540,0.5525420,1.023453,0.5};
+inline GLuint vert, frag, program;
+inline float a = 0;
+inline float b = 0;
+inline double frame=0,timet=0,timebase=0,fps=0,ft=0;
+inline float lpos[4] = {1.2540,0.5525420,1.023453,0.5};
 char *textFileRead(char *filename)
 {
     
@@ -66,13 +66,15 @@ void renderScene(void)
 		ft = 1/fps;
 		std::string str_fps = std::to_string(fps);
 		std::string str_ft = std::to_string(ft);
-		std::string title = "FPS : " + str_fps + " / Frametime : " + str_ft;
+		std::string title = "FPS : " + str_fps + " / Frametime : " + str_ft + " s";
 		glutSetWindowTitle(title.c_str());
 	}
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_MULTISAMPLE);
-
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
 	glLoadIdentity();
 	gluLookAt(0.0,5.0,5.0, 
 		      0.0,0.0,0.0,

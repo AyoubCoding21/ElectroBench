@@ -3,6 +3,25 @@ varying vec3 vNormal;
 varying vec3 vViewDir;
 varying vec2 vTexCoord;
 
+uniform float time; // Time variable passed from the application
+
+vec2 waterRippleEffect(vec2 coord) {
+    float frequency = 3.0;
+    float amplitude = 0.01;
+    float speed = 0.5;
+    float distortion = sin(coord.y * frequency + time * speed) * amplitude;
+    vec2 offset = vec2(distortion, 0.0);
+    return coord + offset;
+}
+
+vec2 scrollingTextureEffect(vec2 coord) {
+    float scrollSpeedX = 0.2;
+    float scrollSpeedY = 0.1;
+    vec2 offset = vec2(fract(coord.x + time * scrollSpeedX), fract(coord.y + time * scrollSpeedY));
+    return offset;
+}
+
+
 vec4 mod289(vec4 x) {
   return x - floor(x * (1.0 / 289.0)) * 289.0; 
 }
@@ -92,17 +111,161 @@ float random(vec4 v)
                + dot(m1*m1, vec2(dot(p3, x3), dot(p4, x4))));
 }
 
+vec2 fade(vec2 t) {
+  return t*t*t*(t*(t*6.0-15.0)+10.0);
+}
+
+float rand(vec2 P)
+{
+  vec4 Pi = floor(P.xyxy) + vec4(0.0, 0.0, 1.0, 1.0);
+  vec4 Pf = fract(P.xyxy) - vec4(0.0, 0.0, 1.0, 1.0);
+  Pi = mod289(Pi);
+  vec4 ix = Pi.xzxz;
+  vec4 iy = Pi.yyww;
+  vec4 fx = Pf.xzxz;
+  vec4 fy = Pf.yyww;
+
+  vec4 i = permute(permute(ix) + iy);
+
+  vec4 gx = fract(i * (1.0 / 41.0)) * 2.0 - 1.0 ;
+  vec4 gy = abs(gx) - 0.5 ;
+  vec4 tx = floor(gx + 0.5);
+  gx = gx - tx;
+
+  vec2 g00 = vec2(gx.x,gy.x);
+  vec2 g10 = vec2(gx.y,gy.y);
+  vec2 g01 = vec2(gx.z,gy.z);
+  vec2 g11 = vec2(gx.w,gy.w);
+
+  vec4 norm = taylorInvSqrt(vec4(dot(g00, g00), dot(g01, g01), dot(g10, g10), dot(g11, g11)));
+  g00 *= norm.x;  
+  g01 *= norm.y;  
+  g10 *= norm.z;  
+  g11 *= norm.w;  
+
+  float n00 = dot(g00, vec2(fx.x, fy.x));
+  float n10 = dot(g10, vec2(fx.y, fy.y));
+  float n01 = dot(g01, vec2(fx.z, fy.z));
+  float n11 = dot(g11, vec2(fx.w, fy.w));
+
+  vec2 fade_xy = fade(Pf.xy);
+  vec2 n_x = mix(vec2(n00, n01), vec2(n10, n11), fade_xy.x);
+  float n_xy = mix(n_x.x, n_x.y, fade_xy.y);
+  return 2.3 * n_xy;
+}
+
+vec3 brickTexture(vec2 coord) {
+    float brickWidth = 0.2;
+    float brickHeight = 0.1;
+    float mortarWidth = 0.01;
+    
+    vec2 brickCoord = fract(coord / vec2(brickWidth + mortarWidth, brickHeight + mortarWidth));
+    
+    bool isBrick = brickCoord.x < brickWidth && brickCoord.y < brickHeight;
+    bool isMortar = (brickCoord.x < brickWidth && brickCoord.y < mortarWidth) ||
+                    (brickCoord.x < mortarWidth && brickCoord.y < brickHeight);
+    
+    return mix(vec3(0.8, 0.4, 0.00001), vec3(0.2, 0.2, 0.2), float(isMortar)) * float(isBrick);
+}
+
+vec3 noise4DTexture(vec2 coord) {
+    float time = 1.0;
+    float noiseValue = rand(coord + time);
+    return vec3(noiseValue);
+}
+
+vec3 fireTexture(vec2 coord) {
+    float time = 1.0;
+    float noiseValue = rand(coord + time);
+    vec3 fireColor = vec3(1.0, 0.295, 0.01);
+    float speed = 2.0;
+    float distortion = sin(coord.y * 40.0 + coord.x * speed) * 0.1;
+    vec2 offseti = vec2(distortion, 0.0);
+    vec2 texCoord = coord + offseti;
+    vec3 fireEffect = fireColor * (1.0 - texCoord.y);
+    return fireEffect * noiseValue;
+}
+vec3 blendTextures(vec3 texture1, vec3 texture2, float blendFactor) {
+    return mix(texture1, texture2, blendFactor);
+}
+vec3 multiTexture1(vec2 coord) {
+    float time = 1.0;
+    float noiseValue = rand(coord + time);
+    return vec3(0.2, 0.2, 0.2) * noiseValue;
+}
+
+vec3 multiTexture2(vec2 coord) {
+    float time = 1.0;
+    float noiseValue = rand(coord + time);
+    return vec3(0.8, 0.4, 0.00001) * noiseValue;
+}
+
+vec3 multiTexture3(vec2 coord) {
+    return brickTexture(coord);
+}
+
+vec3 multiTexture4(vec2 coord) {
+    return fireTexture(coord);
+}
+
+vec3 multiTexture5(vec2 coord) {
+    float time = 1.0;
+    float noiseValue = rand(coord + time);
+    return vec3(1.0, 0.295, 0.01) * (1.0 - coord.y) * noiseValue;
+}
+float gpuBenchmarkingEffect(vec2 coord) {
+    float value = 0.0;
+    float time = 0.0;
+
+    for (int i = 0; i < 10; i++) {
+        value += rand(coord + time);
+        value += noise4DTexture(coord + time).x;
+        time += 0.1;
+    }
+
+    return value / 5.0;
+}
+vec3 boisWallTexture(vec2 coord) {
+    float frequency = 10.0;
+    float amplitude = 0.1;
+    vec2 noiseCoord = coord * frequency;
+    float noiseValue = gpuBenchmarkingEffect(noiseCoord);
+    float distortion = sin(noiseValue) * amplitude;
+    
+    vec2 woodCoord = fract(coord * frequency);
+    woodCoord.x += distortion;
+    
+    return mix(vec3(0.2, 0.08, 0.00), vec3(0.6, 0.3, 0.1), woodCoord.x);
+}
 void main()
 {
     vec3 lightColor = vec3(1.0, 0.3, 0.0);
     vec3 ambientColor = vec3(0.96, 0.25, 0.05);
-    vec3 diffuseColor = vec3(0.8, 0.09, 0.09);
-    vec3 specularColor = vec3(0.38, 0.13, 0.02);
+    vec3 diffuseColor = vec3(0.8, 0.09, 0.00);
+    vec3 specularColor = vec3(0.9, 0.13, 0.02);
     float shininess = 128.0;
     vec3 N = normalize(vNormal);
     vec3 E = normalize(-vViewDir);
     vec3 finalColor = ambientColor;
-    float shadowAmount = 0.000009041;
+    vec3 fireColor = fireTexture(vTexCoord);
+    float blendFactor1 = 0.5;
+    float blendFactor2 = 0.6;
+    float blendFactor3 = 0.2;
+    float blendFactor4 = 0.3;
+    float blendFactor5 = 0.4;
+    vec3 texture1 = multiTexture1(vTexCoord);
+    vec3 texture2 = multiTexture2(vTexCoord);
+    vec3 texture3 = multiTexture3(vTexCoord);
+    vec3 texture4 = multiTexture4(vTexCoord);
+    vec3 texture5 = multiTexture5(vTexCoord);
+    finalColor += blendTextures(finalColor, texture3, blendFactor2);
+    finalColor += blendTextures(finalColor, texture4, blendFactor3);
+    finalColor += blendTextures(finalColor, texture5, blendFactor4);
+    vec3 noiseColor = noise4DTexture(vTexCoord);
+    vec3 brickColor = brickTexture(vTexCoord);
+    vec3 woodColor = boisWallTexture(vTexCoord);
+    finalColor *= mix(mix(mix((noiseColor * 1.5), (brickColor * 1.5), 0.56), fireColor, 0.3), woodColor, 0.5);
+    float shadowAmount = 0.00009041;
     float bias = 0.005;
     vec3 lightDir1 = normalize(vec3(random(vec4(pow(0.9687848, 0.5*-0.12+0.1-0.258))), 
                                       random(vec4(-0.5+0.6-0.1*0.9)), 
@@ -238,19 +401,7 @@ void main()
         shadowAmount = 2.01;
     }
     finalColor -= vec3(shadowAmount);
-
-    int numLevels = 6; 
-    float toonValue = floor(NdotL1 * float(numLevels)) / float(numLevels);
-    vec3 toonColor = vec3(toonValue);
-    finalColor = mix(toonColor, finalColor, smoothstep(0.0, 0.1, ((NdotL1 + NdotL12 + NdotL11 + NdotL10 + NdotL2 + NdotL3 + NdotL13 + NdotL4 + NdotL5 + NdotL6 + NdotL7 + NdotL8 + NdotL9)/13)));
-
-    vec3 fireColor = vec3(1.0, 0.495, 0.01);
-    float speed = 2.0;
-    float distortion = sin(vTexCoord.y * 40.0 + gl_FragCoord.x * speed) * 0.1;
-    vec2 offseti = vec2(distortion, 0.0);
-    vec2 texCoord = vTexCoord + offseti;
-    vec3 fireEffect = fireColor * (1.0 - texCoord.y);
-    finalColor += (fireEffect * 2);
-
-    gl_FragColor = vec4(finalColor, 0.85);
+    float glowIntensity = NdotL1 * 3.0;
+    finalColor += vec3(1.0, 0.2, 0.0) * glowIntensity;
+    gl_FragColor = vec4(finalColor, 1.0);
 }
