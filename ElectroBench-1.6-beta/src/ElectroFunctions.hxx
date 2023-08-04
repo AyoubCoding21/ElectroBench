@@ -1,5 +1,6 @@
+#pragma once
 #include <GL/glew.h>
-#include <GL/glut.h>
+#include <GL/freeglut.h>
 #include <GL/glxew.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -71,10 +72,11 @@ void renderScene(void)
 	}
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_MULTISAMPLE);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_FRONT);
+        glEnable(GL_MULTISAMPLE);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_FRONT);
+        glHint(GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
 	glLoadIdentity();
 	gluLookAt(0.0,5.0,5.0, 
 		      0.0,0.0,0.0,
