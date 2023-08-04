@@ -37,7 +37,7 @@ When a light source illuminates a scene, the Lambertian shading model is used to
 
 **Rendering:**
 
-The project renders a teapot, then uses shaders to apply the effects on it, with the help of some attributes mentionned in the main.cxx file.
+The project renders a teapot, then uses shaders to apply the effects on it.
 
 **Connection bettween shaders:**
 
