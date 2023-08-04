@@ -3,25 +3,6 @@ varying vec3 vNormal;
 varying vec3 vViewDir;
 varying vec2 vTexCoord;
 
-uniform float time; // Time variable passed from the application
-
-vec2 waterRippleEffect(vec2 coord) {
-    float frequency = 3.0;
-    float amplitude = 0.01;
-    float speed = 0.5;
-    float distortion = sin(coord.y * frequency + time * speed) * amplitude;
-    vec2 offset = vec2(distortion, 0.0);
-    return coord + offset;
-}
-
-vec2 scrollingTextureEffect(vec2 coord) {
-    float scrollSpeedX = 0.2;
-    float scrollSpeedY = 0.1;
-    vec2 offset = vec2(fract(coord.x + time * scrollSpeedX), fract(coord.y + time * scrollSpeedY));
-    return offset;
-}
-
-
 vec4 mod289(vec4 x) {
   return x - floor(x * (1.0 / 289.0)) * 289.0; 
 }
