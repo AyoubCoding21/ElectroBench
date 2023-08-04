@@ -8,7 +8,7 @@ int main(int argc, char **argv) {
 	glutIdleFunc(renderScene);
 	glutReshapeFunc(changeSize);
 	glutKeyboardFunc(processKeys);
-        glutSet
+        glutSetOption(GLUT_MULTISAMPLE, 16);
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glewInit();
 	glxewInit();
