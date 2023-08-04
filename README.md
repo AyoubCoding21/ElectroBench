@@ -17,7 +17,7 @@ I'm gonna first explain some of the effects that are in this project :
 
 **Blinn-Phong**: Blinn-Phong is a *mathematically* optimised superset of Phong. Instead of calculating the specular reflection using a reflection vector (sometimes called R), The Blinn-Phong model uses a halfway vector between the viewer's direction and the light direction instead of the reflection vector. The halfway vector is computed as the normalized sum of the light vector and the view vector (the vector pointing from the surface point to the viewer's eye).
 
-**Shadows**: Shadows in this benchmark are used by calculating clamp to dot of the vPositon and vNormal of the light then multipling it by the color, It was used in v1.8-Beta, but in other versions it uses shadow-mapping. 
+**Shadows**: Shadows in this benchmark are used by calculating clamp to dot of the vPositon and vNormal of the light then multipling it by the color, It was used in v1.8-Beta, but in other versions it uses shadow-mapping, smooth-step or lambertian effect. 
 
 **Procedural texture :** In all of these versions, we used a different type of texture called procedural texture we don't use ```sampler3D``` types, but instead, we used different kinds of noises (like noise4D, perlin noise, FBM...) + effects that are written procedurally (we don't use sth like ```texture2D()``` functions).
 
