@@ -2,7 +2,7 @@
 varying vec3 vNormal;
 varying vec3 vViewDir;
 varying vec2 vTexCoord;
-
+float roughness = 0.8;
 vec3 mod289(vec3 x) {
   return x - floor(x * (1.0 / 289.0)) * 289.0;
 }
@@ -282,7 +282,7 @@ float gpuBenchmarkingEffect(vec2 coord) {
     float value = 0.0;
     float time = 0.0;
 
-    for (int i = 0; i < 450; i++) {
+    for (int i = 0; i < 590; i++) {
         value += snoise(coord + time) + rand(coord + time) + rsnoise(coord + time);
         value += noise4DTexture(coord + time).x;
         time += 0.5;
@@ -300,7 +300,7 @@ vec3 boisWallTexture(vec2 coord) {
     vec2 woodCoord = fract(coord * frequency);
     woodCoord.x += distortion;
     
-    return mix(vec3(0.2, 0.08, 0.00), vec3(0.6, 0.3, 0.1), woodCoord.x);
+    return mix(vec3(0.9, 0.3, 0.05), vec3(0.6, 0.2, 0.01), woodCoord.x);
 }
 void main()
 {
@@ -339,7 +339,20 @@ void main()
     vec3 brickColor = brickTexture(vTexCoord);
     vec3 woodColor = boisWallTexture(vTexCoord);
     finalColor *= mix(mix(mix((noiseColor * 1.5), (brickColor * 1.5), 0.56), fireColor, 0.3), woodColor, 0.5);
-    float shadowAmount = 0.00009041;
+    vec3 L = normalize(-vViewDir); 
+    vec3 V = normalize(-vViewDir);
+
+    float A = 1.0 - 0.5 * roughness / (roughness + 0.33);
+    float B = 0.45 * roughness / (roughness + 0.09);
+    float diffuseFactor = max(0.0, dot(N, L)) * max(0.0, dot(N, V));
+    float thetaR = acos(dot(L, V));
+    float thetaI = acos(dot(N, L));
+    float alpha = max(thetaR, thetaI);
+    float beta = min(thetaR, thetaI);
+    float R_diffuse = A + B * diffuseFactor * sin(alpha) * tan(beta);
+
+    finalColor += R_diffuse * diffuseColor * lightColor;
+    float shadowAmount = 0.09041;
     float bias = 0.005;
     vec3 lightDir1 = normalize(vec3(random(vec4(pow(0.9687848, 0.5*-0.12+0.1-0.258))), 
                                       random(vec4(-0.5+0.6-0.1*0.9)), 
