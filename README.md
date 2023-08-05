@@ -59,7 +59,7 @@ In these updated commits (v1.7-Beta+) so many breaking changes were used to make
 
 ***Effects :*** From v1.7 onwards, Multiple lighting sources were used, Furthermore, Lambertian effects were added to all the versions, and shadows were included to all lighting sources in addition to the lighting components and effects.
 
-***Multiple ways to handle light sources :*** In v1.8-Beta we used in the vertex shader an varying vec3 array called ```varying vec3 vLightDir[20]```, and we looped over that variable 5 times with the index ```i``` moving up at each loop, until 20 was reached, i was the number that was putted in the ```gl_LightSource[i]``` structure and we add that structure in the array and pass it to the fragment shader. For other versions, The computation of light sources was using plain vectors that were assigned to variables (*and for 13 light sources, It was so much*). But in v1.6, We used Simplex Noise to create a procedural texture and then we used an array to store 10 lights and 10 color lights and modified the snoise function to support vec3 instead of vec4 in the original. The structure of the lightsources should look like this:
+***Multiple ways to handle light sources :*** In v1.8-Beta we used in the vertex shader an varying vec3 array called ```varying vec3 vLightDir[20]```, and we looped over that variable 5 times with the index ```i``` moving up at each loop, until 20 was reached, i was the number that was putted in the ```gl_LightSource[i]``` structure and we add that structure in the array and pass it to the fragment shader. For other versions, The computation of light sources was using plain vectors that were assigned to variables (*and for 13 light sources, It was so much*). But in v1.6, We used Simplex Noise to create a procedural texture and then we used an array to store 10 lights and 10 color lights and modified the snoise function to support vec3 instead of vec4 in the original. The structure of the lightsources should look like this :
 
 ```glsl
   
@@ -93,6 +93,8 @@ vec3 lightColors[10] = vec3[10](
 ***Mathematical complexity :*** In v2.0-Beta I used a noise4D generator to generate pseudo-random numbers directly on the GPU, based on the simplex noise and then passes those values to the positions of the lighting sources. That passes it also to the shadows, which their positions are the opposite of the lights. And in v1.8, I used Perlin noise with a transparent touch. And in v1.6->1.7 I used Simplex noise.
 
 ***Procedural textures :*** To make textures in our projects, We used noising algorithms like Perlin noise, Simplex noise, 4D/3D noise and FBM noise, then we start by defining patterns for the textures then add to them some colors, then starts the noise algo on the patterns and mix all the patterns and return the textureColor, In other places, We maked a pattern for the object to simulate, then we noise on the coordinates * pattern and we return it.
+
+***Multi-procedural-texturing :*** In v2.0 of ElectroBench we did something very special, although other versions were complex, we wanted v2.0 to be the most complex of them all
 
 # How to execute this project ?
 It's so simple, just follow the instructions for the versions you want to execute :
