@@ -21,7 +21,7 @@ I'm gonna first explain some of the effects that are in this project :
 
 **Procedural texture :** In all of these versions, we used a different type of texture called procedural texture we don't use ```sampler3D``` types, but instead, we used different kinds of noises (like noise4D, perlin noise, FBM...) + effects that are written procedurally (we don't use sth like ```texture2D()``` functions).
 
-**Blending texture :** In our ElectroBench versions, We use texture-blending, Which is combining textures to produce an effect that combines all of these textures, in v2.0 it was used. It blended 3 different textures. A wooden-like texture + brick-wall-like texture + fire texture.
+**Blending texture :** In our ElectroBench versions, We use texture-blending, Which is combining textures to produce an effect that combines all of these textures, in v2.0 it blended 3 different textures. A wooden-like texture + brick-wall-like texture + fire texture. See the Complexified breaking changes section for more info.
 
 **Ambient occulsion :** Ambient occlusion (AO) is a shading and rendering technique used in computer graphics to simulate the soft shadows and subtle darkening that occur in crevices, cracks, and tight spaces where ambient light has difficulty reaching. It is a form of global illumination, which means it takes into account the indirect lighting in a scene.
 
