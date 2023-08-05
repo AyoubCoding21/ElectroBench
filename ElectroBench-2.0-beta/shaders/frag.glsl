@@ -3,6 +3,15 @@ varying vec3 vNormal;
 varying vec3 vViewDir;
 varying vec2 vTexCoord;
 
+vec3 mod289(vec3 x) {
+  return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+vec2 mod289(vec2 x) {
+  return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+vec3 permute(vec3 x) {
+  return mod289(((x*34.0)+10.0)*x);
+}
 vec4 mod289(vec4 x) {
   return x - floor(x * (1.0 / 289.0)) * 289.0; 
 }
@@ -41,7 +50,17 @@ vec4 grad4(float j, vec4 ip)
 
   return p;
 }
-
+vec2 rgrad2(vec2 p, float rot) {
+#if 0
+  float u = permute(permute(p.x) + p.y) * 0.0243902439 + rot; 
+  u = 4.0 * fract(u) - 2.0;
+  return vec2(abs(u)-1.0, abs(abs(u+1.0)-2.0)-1.0);
+#else
+  float u = permute(permute(p.x) + p.y) * 0.0243902439 + rot; 
+  u = fract(u) * 6.28318530718; 
+  return vec2(cos(u), sin(u));
+#endif
+}
 #define F4 0.309016994374947451
 
 float random(vec4 v)
@@ -91,7 +110,35 @@ float random(vec4 v)
   return 49.0 * (dot(m0*m0, vec3(dot(p0, x0), dot(p1, x1), dot(p2, x2)))
                + dot(m1*m1, vec2(dot(p3, x3), dot(p4, x4))));
 }
+float snoise(vec2 v)
+{
+  const vec4 C = vec4(0.211324865405187, 
+                      0.366025403784439, 
+                     -0.577350269189626,
+                      0.024390243902439); 
+  vec2 i  = floor(v + dot(v, C.yy));
+  vec2 x0 = v - i + dot(i, C.xx);
+  vec2 i1;
+  i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  i = mod289(i); 
+  vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0))
+		+ i.x + vec3(0.0, i1.x, 1.0));
 
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+  m = m * m;
+  m = m * m;
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 ox = floor(x + 0.5);
+  vec3 a0 = x - ox;
+  m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+  vec3 g;
+  g.x  = a0.x  * x0.x  + h.x  * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
 vec2 fade(vec2 t) {
   return t*t*t*(t*(t*6.0-15.0)+10.0);
 }
@@ -135,6 +182,43 @@ float rand(vec2 P)
   return 2.3 * n_xy;
 }
 
+float srnoise(vec2 pos, float rot) 
+{
+  pos.y += 0.001;
+  vec2 uv = vec2(pos.x + pos.y*0.5, pos.y);
+  vec2 i0 = floor(uv);
+  vec2 f0 = fract(uv);
+  vec2 i1 = (f0.x > f0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec2 p0 = vec2(i0.x - i0.y * 0.5, i0.y);
+  vec2 p1 = vec2(p0.x + i1.x - i1.y * 0.5, p0.y + i1.y);
+  vec2 p2 = vec2(p0.x + 0.5, p0.y + 1.0);
+  i1 = i0 + i1;
+  vec2 i2 = i0 + vec2(1.0, 1.0);
+  vec2 d0 = pos - p0;
+  vec2 d1 = pos - p1;
+  vec2 d2 = pos - p2;
+  vec3 x = vec3(p0.x, p1.x, p2.x);
+  vec3 y = vec3(p0.y, p1.y, p2.y);
+  vec3 iuw = x + 0.5 * y;
+  vec3 ivw = y;
+  iuw = mod289(iuw);
+  ivw = mod289(ivw);
+  vec2 g0 = rgrad2(vec2(iuw.x, ivw.x), rot);
+  vec2 g1 = rgrad2(vec2(iuw.y, ivw.y), rot);
+  vec2 g2 = rgrad2(vec2(iuw.z, ivw.z), rot);
+  vec3 w = vec3(dot(g0, d0), dot(g1, d1), dot(g2, d2));
+  vec3 t = 0.8 - vec3(dot(d0, d0), dot(d1, d1), dot(d2, d2));
+  t = max(t, 0.0);
+  vec3 t2 = t * t;
+  vec3 t4 = t2 * t2;
+  float n = dot(t4, w);
+  return 11.0*n;
+}
+
+float rsnoise(vec2 pos) {
+  return srnoise(pos, 0.0);
+}
+
 vec3 brickTexture(vec2 coord) {
     float brickWidth = 0.2;
     float brickHeight = 0.1;
@@ -151,13 +235,13 @@ vec3 brickTexture(vec2 coord) {
 
 vec3 noise4DTexture(vec2 coord) {
     float time = 1.0;
-    float noiseValue = rand(coord + time);
+    float noiseValue = snoise(coord + time);
     return vec3(noiseValue);
 }
 
 vec3 fireTexture(vec2 coord) {
     float time = 1.0;
-    float noiseValue = rand(coord + time);
+    float noiseValue = rsnoise(coord + time);
     vec3 fireColor = vec3(1.0, 0.295, 0.01);
     float speed = 2.0;
     float distortion = sin(coord.y * 40.0 + coord.x * speed) * 0.1;
@@ -171,7 +255,7 @@ vec3 blendTextures(vec3 texture1, vec3 texture2, float blendFactor) {
 }
 vec3 multiTexture1(vec2 coord) {
     float time = 1.0;
-    float noiseValue = rand(coord + time);
+    float noiseValue = snoise(coord + time);
     return vec3(0.2, 0.2, 0.2) * noiseValue;
 }
 
@@ -191,17 +275,17 @@ vec3 multiTexture4(vec2 coord) {
 
 vec3 multiTexture5(vec2 coord) {
     float time = 1.0;
-    float noiseValue = rand(coord + time);
+    float noiseValue = snoise(coord + time);
     return vec3(1.0, 0.295, 0.01) * (1.0 - coord.y) * noiseValue;
 }
 float gpuBenchmarkingEffect(vec2 coord) {
     float value = 0.0;
     float time = 0.0;
 
-    for (int i = 0; i < 10; i++) {
-        value += rand(coord + time);
+    for (int i = 0; i < 450; i++) {
+        value += snoise(coord + time) + rand(coord + time) + rsnoise(coord + time);
         value += noise4DTexture(coord + time).x;
-        time += 0.1;
+        time += 0.5;
     }
 
     return value / 5.0;
