@@ -108,6 +108,8 @@ Challenge 2 : **Time** : I am 12 years old, and study in 6th grade (but now I'mm
 
 Challenge 3 : **Configuration** : Sometimes some stuff do not work for me and I need to reimplement them with the limitations from scratch. And that happens to me so often, and it is really bad.
 
+Challenge 4 : **AI** : AI is taking over the programming world and I am afraid, It is really bad and is going to make programming messed up, even it's answers are not that right.
+
 # How to execute this project ?
 
 It's so simple, just follow the instructions for the versions you want to execute :
