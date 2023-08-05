@@ -94,7 +94,7 @@ vec3 lightColors[10] = vec3[10](
 
 ***Procedural textures :*** To make textures in our projects, We used noising algorithms like Perlin noise, Simplex noise, 4D/3D noise and FBM noise, then we start by defining patterns for the textures then add to them some colors, then starts the noise algo on the patterns and mix all the patterns and return the textureColor, In other places, We maked a pattern for the object to simulate, then we noise on the coordinates * pattern and we return it.
 
-***Multi-procedural-texturing :*** In v2.0 of ElectroBench we did something very special, although other versions were complex, we wanted v2.0 to be the most complex of them all, So what we did ? We did first 4 noising types : *noise4D, 
+***Multi-procedural-texturing :*** In v2.0 of ElectroBench we did something very special, although other versions were complex, we wanted v2.0 to be the most complex of them all, So what we did ? We did first 4 noising types : *noise4D, srnoise, Perlin noise and Simplex noise* and we did a lookup function that looped
 
 # How to execute this project ?
 It's so simple, just follow the instructions for the versions you want to execute :
