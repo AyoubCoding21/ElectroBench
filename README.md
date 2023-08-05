@@ -35,19 +35,19 @@ When a light source illuminates a scene, the Lambertian shading model is used to
 
 ```I = I₀ * kd * cos(θ)```
 
-**Rendering:**
+# Rendering:
 
 The project renders a teapot, then uses shaders to apply the effects on it.
 
-**Connection bettween shaders:**
+# Connection bettween shaders:
 
 The vertex and fragment shaders in ElectroBench uses a bi-directionnal connection made possible by the use of varying variables.
 
-**Programming languages used:**
+# Programming languages used:
 
 The programming languages used are **C++** for the *main* code, **GLSL 1.2 (OpenGL 2.1)** for shaders and **Shell** for execution and building.
 
-**Compilation of this project:**
+# Compilation of this project:
 
 We used a 2-step manual compilation, it generates LLVM IR to a file and then compiles and links that IR.
 
