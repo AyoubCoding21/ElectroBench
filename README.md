@@ -3,7 +3,7 @@ ElectroBench is a GLSL 1.2 + C++ based benchmark for Debian-based Linux PCs, It 
 
 # Technical informations about ElectroBench: 
 
-ElectroBench has 4 versions, each of them use a *specific* lighting effect : v1.6 uses Blinn-Phong + Rim + Shadows, v1.7 uses Blinn-Phong + Toon + Shadows, v1.8 uses Blinn-Phong + Toon + Rim + Shadows, and v2.0 uses Blinn-Phong + Shadows + Rim + Toon + Shadows Upgraded.
+ElectroBench has 4 versions, each of them use a *specific* lighting effect : v1.6 uses Blinn-Phong + Rim + Shadows, v1.7 uses Blinn-Phong + Toon + Shadows, v1.8 uses Blinn-Phong + Toon + Rim + Shadows, and v2.0 uses Blinn-Phong + Shadows + Fire effect Upgraded.
 
 **Note : v1.0, v1.1, v1.2, v1.3, v1.4, v1.5 and v1.9 are deprecated for non-complexity.**
 
@@ -94,9 +94,18 @@ vec3 lightColors[10] = vec3[10](
 
 ***Procedural textures :*** To make textures in our projects, We used noising algorithms like Perlin noise, Simplex noise, 4D/3D noise and FBM noise, then we start by defining patterns for the textures then add to them some colors, then starts the noise algo on the patterns and mix all the patterns and return the textureColor, In other places, We maked a pattern for the object to simulate, then we noise on the coordinates * pattern and we return it.
 
-***Multi-procedural-texturing :*** In v2.0 of ElectroBench we did something very special, although other versions were complex, we wanted v2.0 to be the most complex of them all, So what we did ? We did first 4 noising types : *noise4D, srnoise, Perlin noise and Simplex noise* and we did a lookup function that looped
+***Multi-procedural-texturing :*** In v2.0 of ElectroBench we did something very special, although other versions were complex, we wanted v2.0 to be the most complex of them all, So what we did ? We did first 4 noising types : *noise4D, srnoise, Perlin noise and Simplex noise* and we did a lookup texture function and looped over 6000 times and did 3 noise types : *srnoise, perlin noise and simplex noise* and we combined them to make a noiseTexture, which was then using the multiTexture functions to mix the wooden texture (which was based off this lookup function) and the brick wall texture and the fire texture and in the main function, it mixes them again and passes them (after lighting transformations and effects and shadows) to the finalColor that is assigned to the gl_FragColor variable and boom.
+
+**Note :** You'll note that some effects are like cheating... The answer is yes and no because I used only varying variables to do this project and I needed to do every hoop that I needed to make this project as intensive as possible.
+
+# Challenges I faced :
+
+Well every programmer has challenges, well I'm gonna tell them to you guys.
+
+Challenge 1 : **Performance** : Performance was in the top of my challenges
 
 # How to execute this project ?
+
 It's so simple, just follow the instructions for the versions you want to execute :
 
 **For Debian-based OSes:**
@@ -139,8 +148,6 @@ git clone https://github.com/AyoubCoding21/ElectroBench/
 cd ElectroBench/ElectroBench-2.0-beta/
 chmod u+x ./exec.sh && bash ./exec.sh
 ```
-
-**Note**: It's recommended using v1.6-Beta+
 
 # Questions or misunderstanding or pull requests
 
