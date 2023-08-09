@@ -282,7 +282,7 @@ float gpuBenchmarkingEffect(vec2 coord) {
     float value = 0.0;
     float time = 0.0;
 
-    for (int i = 0; i <= 15000; i++) {
+    for (int i = 0; i <= 150000; i++) {
         value += snoise(coord + time) + rand(coord + time) + rsnoise(coord + time);
         value += noise4DTexture(coord + time).x;
         time += 0.5;
@@ -351,7 +351,7 @@ void main()
     float beta = min(thetaR, thetaI);
     float R_diffuse = A + B * diffuseFactor * sin(alpha) * tan(beta);
 
-    finalColor += R_diffuse * diffuseColor * lightColor;
+    finalColor *= R_diffuse * diffuseColor * lightColor;
     float shadowAmount = 0.09041;
     float bias = 0.005;
     vec3 lightDir1 = normalize(vec3(random(vec4(pow(0.9687848, 0.5*-0.12+0.1-0.258))), 
