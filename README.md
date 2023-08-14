@@ -33,7 +33,7 @@ Perlin noise works by generating a grid of random gradient vectors and then inte
 
 When a light source illuminates a scene, the Lambertian shading model is used to determine the brightness of a point on a surface based on the angle between the incoming light direction and the surface normal. However, in the presence of other objects, the amount of light reaching a point on the surface can be reduced if it is partially or completely blocked by other objects. This is what creates the shadowing effect. The formula of the Lambertian effect is based on the cosine law, The formula can be represented as :
 
-```I = I₀ * kd * cos(θ)```
+```I = I(0) * kd * cos(θ)```
 
 # Rendering:
 
