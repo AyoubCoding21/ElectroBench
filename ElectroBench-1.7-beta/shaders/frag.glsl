@@ -99,7 +99,7 @@ float fbm(vec3 v) {
     float value = 0.0;
     float amplitude = 0.5;
     vec3 p = v;
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 20; i++) {
         value += amplitude * snoise(p);
         p *= 2.0;
         amplitude *= 0.5;
