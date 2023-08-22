@@ -282,7 +282,7 @@ float gpuBenchmarkingEffect(vec2 coord) {
     float value = 0.0;
     float time = 0.0;
 
-    for (int i = 0; i <= 150000; i++) {
+    for (int i = 0; i < 950000; i++) {
         value += snoise(coord + time) + rand(coord + time) + rsnoise(coord + time);
         value += noise4DTexture(coord + time).x;
         time += 0.5;
