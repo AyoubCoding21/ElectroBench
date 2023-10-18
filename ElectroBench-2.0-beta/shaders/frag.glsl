@@ -516,13 +516,9 @@ vec3 metalTexture(vec2 coord, vec3 eyeDir) {
     float metalNoise = noisev4DTexture(metalCoord).r;
     vec3 metalColor = mix(vec3(0.3804, 0.3647, 0.3647), vec3(0.298, 0.3137, 0.3059), metalNoise);
 
-    // Add steel texture
-    if (isMetal || isMortar) {
-        // Adjust the steel texture parameters as needed
-        float steelNoise = noisev4DTexture(metalCoord).r;
-        vec3 steelColor = mix(vec3(0.333, 0.333, 0.333), vec3(0.4, 0.4, 0.4), steelNoise);
-        metalColor = mix(metalColor, steelColor, 0.7);
-    }
+    float steelNoise = noisev4DTexture(metalCoord).r;
+    vec3 steelColor = mix(vec3(0.333, 0.333, 0.333), vec3(0.4, 0.4, 0.4), steelNoise);
+    metalColor = mix(metalColor, steelColor, 0.7);
 
     vec3 metalColor00 = metalColor;
     vec3 metalColor01 = metalColor;
