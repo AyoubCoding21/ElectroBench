@@ -449,8 +449,8 @@ float benchNoise(vec2 P)
 {
     float res = 0.0;
     float time = 0.0;
-	for (float i = 0; i < 950000000.0; i += .01)
-	{
+    for (float i = 0; i < 950000000.0; i += .01)
+    {
         res = cellular(vec3(P + time, time + 0.4)).x + 
 			  cellular(vec3(P + time, time + 0.4)).y +
               snoise(vec3(P + time, time + 0.8)) + 
@@ -459,7 +459,7 @@ float benchNoise(vec2 P)
               cellular2D(P + time).x + 
 			  cellular2D(P + time).y;
         time += 0.25;
-	}
+    }
     return res;
 }
 vec3 noisev4DTexture(vec2 coord) {
