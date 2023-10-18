@@ -133,15 +133,15 @@ float snoise(vec2 pos) {
 
 float snoise(vec3 v)
 {
-  const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
+  const vec2  C = vec2(1.0/6.0, 1.0/3.0);
   const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
 
-  vec3 i  = floor(v + dot(v, C.yyy) );
-  vec3 x0 =   v - i + dot(i, C.xxx) ;
+  vec3 i  = floor(v + dot(v, C.yyy));
+  vec3 x0 =   v - i + dot(i, C.xxx);
   vec3 g = step(x0.yzx, x0.xyz);
   vec3 l = 1.0 - g;
-  vec3 i1 = min( g.xyz, l.zxy );
-  vec3 i2 = max( g.xyz, l.zxy );
+  vec3 i1 = min(g.xyz, l.zxy);
+  vec3 i2 = max(g.xyz, l.zxy);
 
   vec3 x1 = x0 - i1 + C.xxx;
   vec3 x2 = x0 - i2 + C.yyy; // 2.0*C.x = 1/3 = C.y
