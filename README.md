@@ -102,7 +102,7 @@ Well every programmer has challenges, well I'm gonna tell them to you guys.
 
 Challenge 1 : **Performance** : Performance was in the top of my challenges because I couldn't afford even a new phone, my phone was won in a raffle and made my first versions of ElectroBench and JavaChat and E-Weather. And just last year, I bought a bad PC from 2007 that had OpenGL 2.1 (GLSL 1.2) maximum support and has a 2-Core CPU and 2 Gigs of RAM, I removed Windows from it and installed Linux (*Long live Linux*) and you get the reason why I did so much limitations in my project.
 
-Challenge 2 : **Time** : I am 12 years old, and study in 7th grade and since the school year is 10 months long with 5 vacations each 7 days long (including week-ends). There was so limited time and with new lessons and revising, I was even more time-limited, I learned all these programming languages in 2 years in these conditions, but everytime things are getting harder. And there was kind of no time for me to make these projects.
+Challenge 2 : **Time** : I study in 7th grade and since the school year is 10 months long with 5 vacations each 7 days long (including week-ends). There was so limited time and with new lessons and revising, I was even more time-limited, I learned all these programming languages in 2 years in these conditions, but everytime things are getting harder. And there was kind of no time for me to make these projects.
 
 Challenge 3 : **Configuration** : Sometimes some stuff do not work for me and I need to reimplement them with the limitations from scratch. And that happens to me so often, and it is really bad.
 
