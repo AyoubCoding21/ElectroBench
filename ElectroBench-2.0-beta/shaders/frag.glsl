@@ -449,7 +449,7 @@ float benchNoise(vec2 P)
 {
     float res = 0.0;
     float time = 0.0;
-    for (float i = 0; i < 950000.0; i += .01)
+    for (int i = 0; i < 999000; i++)
     {
         res = cellular(vec3(P + time, time + 0.4)).x + 
 	      cellular(vec3(P + time, time + 0.4)).y +
@@ -458,7 +458,7 @@ float benchNoise(vec2 P)
               snoise(P + time) + 
               cellular2D(P + time).x + 
 	     cellular2D(P + time).y;
-        time += 0.25;
+        time += 0.5;
     }
     return res;
 }
