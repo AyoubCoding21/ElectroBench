@@ -1,4 +1,4 @@
-#version 120 
+F#version 120 
 varying vec3 vNormal;
 varying vec3 vPosition;
 varying vec3 vLightDir[31];
@@ -449,12 +449,12 @@ float benchNoise(vec2 P)
 {
     float res = 0.0;
     float time = 0.0;
-    for (int i = 0; i < 999000; i++)
+    for (float i = 0; i < 999000; i++)
     {
-        res = cellular(vec3(P + time, time + 0.4)).x + 
-	      cellular(vec3(P + time, time + 0.4)).y +
-              snoise(vec3(P + time, time + 0.8)) + 
-              rand(vec3(P + time, time + 0.02)) + 
+        res = cellular(vec3(P + time, i + 0.4)).x + 
+	      cellular(vec3(P + time, i + 0.4)).y +
+              snoise(vec3(P + time, i + 0.8)) + 
+              rand(vec3(P + time, i + 0.02)) + 
               snoise(P + time) + 
               cellular2D(P + time).x + 
 	     cellular2D(P + time).y;
