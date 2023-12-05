@@ -1,4 +1,4 @@
-F#version 120 
+#version 120 
 varying vec3 vNormal;
 varying vec3 vPosition;
 varying vec3 vLightDir[31];
