@@ -80,18 +80,23 @@ inline void changeSize(int w, int h) {
 inline void renderScene(void) {
     frame++;
     timet = glutGet(GLUT_ELAPSED_TIME);
-
     if (timet - timebase > 1000) {
         fps = frame * 1000.0 / (timet - timebase);
         timebase = timet;
         frame = 0;
         ft = 1 / fps;
-        std::string str_fps = std::to_string(fps);
-        std::string str_ft = std::to_string(ft);
-        std::string title = "FPS : " + str_fps + " / Frametime : " + str_ft + " seconds";
-        glutSetWindowTitle(title.c_str());
+        char str_fps[50];
+        char str_ft[50];
+        sprintf(str_fps, "%f", fps);
+        sprintf(str_ft, "%f", ft);
+        char title[100];
+        strcpy(title, "FPS : ");
+        strcat(title, str_fps);
+        strcat(title, " / Frametime : ");
+        strcat(title, str_ft);
+        strcat(title, " seconds");
+        glutSetWindowTitle(title);
     }
-
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_MULTISAMPLE);
     glHint(GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
@@ -109,6 +114,7 @@ inline void renderScene(void) {
     b += 1.5;
     glutSwapBuffers();
 }
+
 
 /**
  * Processes keyboard input.
