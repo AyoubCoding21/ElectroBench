@@ -121,7 +121,7 @@ inline void renderScene(void) {
  */
 inline void processKeys(unsigned char key, int x, int y) {
     if (key == 27)
-        std::exit(0);
+        exit(0);
 }
 
 /**
