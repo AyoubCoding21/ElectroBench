@@ -3,7 +3,8 @@
  * @brief Header file used in all ElectroBench projects, Licensed under the GNU GPL-3 License.
  */
 
-#pragma once
+#ifndef __ELECTROFUNCTIONS_H__
+#define __ELECTROFUNCTIONS_H__
 
 // Libraries to include
 #include <GL/glew.h>
@@ -216,3 +217,4 @@ inline void setShaders() {
     printProgramInfoLog(program);
     glUseProgram(program);
 }
+#endif
