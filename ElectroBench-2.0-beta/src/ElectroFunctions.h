@@ -18,8 +18,6 @@
 #define WIDTH 2560  // The window width. 
 #define NAME "ElectroBench" // The window name.
 
-using namespace std;
-
 GLuint vert, frag, program; // Vertex and Fragment shader IDs and Program ID.
 float a = 0; // Rotation angle a. 
 float b = 0; // Rotation angle b. 
