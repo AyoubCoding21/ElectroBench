@@ -1,4 +1,4 @@
-#include "ElectroFunctions.hxx" // Including the lib
+#include "ElectroFunctions.h" // Including the lib
 int main(int argc, char **argv) {
 	// Initialising GLUT
 	glutInit(&argc, argv);
