@@ -3,7 +3,8 @@
  * @brief Header file used in all ElectroBench projects, Licensed under the GNU GPL-3 License.
  */
 
-#pragma once
+#ifndef __ELECTROFUNCTIONS__
+#define __ELECTROFUNCTIONS__
 
 // Libraries to include
 #include <GL/glew.h>
@@ -11,15 +12,11 @@
 #include <GL/glxew.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string>
 #include <cstring>
-#include <iostream>
 
 #define HEIGHT 1440 // The window height.
 #define WIDTH 2560  // The window width. 
 #define NAME "ElectroBench" // The window name.
-
-using namespace std;
 
 GLuint vert, frag, program; // Vertex and Fragment shader IDs and Program ID.
 float a = 0; // Rotation angle a. 
@@ -77,21 +74,27 @@ inline void changeSize(int w, int h) {
 /**
  * Renders the teapot, measures FPS / FrameTime and rotates the teapot.
  */
+
 inline void renderScene(void) {
     frame++;
     timet = glutGet(GLUT_ELAPSED_TIME);
-
     if (timet - timebase > 1000) {
         fps = frame * 1000.0 / (timet - timebase);
         timebase = timet;
         frame = 0;
         ft = 1 / fps;
-        std::string str_fps = std::to_string(fps);
-        std::string str_ft = std::to_string(ft);
-        std::string title = "FPS : " + str_fps + " / Frametime : " + str_ft + " seconds";
-        glutSetWindowTitle(title.c_str());
+        char str_fps[50];
+        char str_ft[50];
+        sprintf(str_fps, "%f", fps);
+        sprintf(str_ft, "%f", ft);
+        char title[100];
+        strcpy(title, "FPS : ");
+        strcat(title, str_fps);
+        strcat(title, " / Frametime : ");
+        strcat(title, str_ft);
+        strcat(title, " seconds");
+        glutSetWindowTitle(title);
     }
-
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_MULTISAMPLE);
     glHint(GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
@@ -109,7 +112,6 @@ inline void renderScene(void) {
     b += 1.5;
     glutSwapBuffers();
 }
-
 /**
  * Processes keyboard input.
  * @param key The pressed key.
@@ -118,7 +120,7 @@ inline void renderScene(void) {
  */
 inline void processKeys(unsigned char key, int x, int y) {
     if (key == 27)
-        std::exit(0);
+        exit(0);
 }
 
 /**
@@ -212,3 +214,4 @@ inline void setShaders() {
     printProgramInfoLog(program);
     glUseProgram(program);
 }
+#endif
