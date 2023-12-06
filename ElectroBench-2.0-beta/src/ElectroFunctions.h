@@ -3,7 +3,8 @@
  * @brief Header file used in all ElectroBench projects, Licensed under the GNU GPL-3 License.
  */
 
-#pragma once
+#ifndef __ELECTROFUNCTIONS__
+#define __ELECTROFUNCTIONS__
 
 // Libraries to include
 #include <GL/glew.h>
@@ -11,9 +12,7 @@
 #include <GL/glxew.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string>
 #include <cstring>
-#include <iostream>
 
 #define HEIGHT 1440 // The window height.
 #define WIDTH 2560  // The window width. 
@@ -218,3 +217,4 @@ inline void setShaders() {
     printProgramInfoLog(program);
     glUseProgram(program);
 }
+#endif
