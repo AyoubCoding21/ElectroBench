@@ -9,7 +9,7 @@ all:
 		sleep 1s
 	else
 		mkdir build
-	clang ./src/main.c -L/usr/lib/ -I/usr/include/ -lGL -lGLU -lGLEW -lglut -lX11 -o build/$(EXECNAME) -v
+	clang++ ./src/main.cxx -L/usr/lib/ -I/usr/include/ -lGL -lGLU -lGLEW -lglut -lX11 -o build/$(EXECNAME) -v
 	chmod u+w+x ./build/$(EXECNAME) && ./build/$(EXECNAME);        
 clean:
 	rm -rf build/$(EXECNAME)

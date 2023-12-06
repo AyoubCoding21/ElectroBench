@@ -1,4 +1,4 @@
-#include "ElectroFunctions.h" // Including the lib
+#include "ElectroFunctions.hxx" // Including the lib
 int main(int argc, char **argv) {
 	// Initialising GLUT
 	glutInit(&argc, argv);
@@ -11,7 +11,7 @@ int main(int argc, char **argv) {
 	glutReshapeFunc(changeSize);
 	glutKeyboardFunc(processKeys);
 
-	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
 
 	glewInit();
 	glxewInit();
