@@ -120,7 +120,7 @@ It's so simple, just follow the instructions for the versions you want to execut
 sudo apt install git make -y --no-install-recommends
 git clone https://github.com/AyoubCoding21/ElectroBench/
 cd ElectroBench/ElectroBench-1.6-beta/
-make install && make all
+make install && make clean && make all
 ```
 
 *v1.7-Beta:*
@@ -129,7 +129,7 @@ make install && make all
 sudo apt install git make -y --no-install-recommends
 git clone https://github.com/AyoubCoding21/ElectroBench/
 cd ElectroBench/ElectroBench-1.7-beta/
-make install && make all
+make install && make clean && make all
 ```
 
 *v1.8-Beta:*
@@ -138,7 +138,7 @@ make install && make all
 sudo apt install git make -y --no-install-recommends
 git clone https://github.com/AyoubCoding21/ElectroBench/
 cd ElectroBench/ElectroBench-1.8-beta/
-make install && make all
+make install && make clean && make all
 ```
 
 
@@ -148,7 +148,7 @@ make install && make all
 sudo apt install git make -y --no-install-recommends
 git clone https://github.com/AyoubCoding21/ElectroBench/
 cd ElectroBench/ElectroBench-2.0-beta/
-make install && make all
+make install && make clean && make all
 ```
 
 # Questions or misunderstanding or pull requests
