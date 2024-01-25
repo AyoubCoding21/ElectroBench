@@ -251,14 +251,17 @@ float rand(vec3 P)
   float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x);
   return 2.2 * n_xyz;
 }
-
+float tdnoise(vec3 p)
+{
+	return snoise(p) + rand(p);
+}
 vec2 cellular(vec3 P) {
 #define K 1/7
 #define Ko 1/2-K/2
 #define K2 1/49
 #define Kz 1/6
 #define Kzo 1/2-1/6*2
-#define jitter 1.562844847 // smaller jitter gives more regular pattern
+#define jitter 1.9762844847 // smaller jitter gives more regular pattern
 
     vec3 Pi = mod289(floor(P));
     vec3 Pf = fract(P) - 0.5;
@@ -408,7 +411,7 @@ vec2 cellular(vec3 P) {
 vec2 cellular2D(vec2 P) {
 #define K2D 1/7
 #define Ko2D 3/7
-#define jitter2D 1.65 // Less gives more regular pattern
+#define jitter2D 1.94125 // Less gives more regular pattern
     vec2 Pi = mod289(floor(P));
     vec2 Pf = fract(P);
     vec3 oi = vec3(-1.0, 0.0, 1.0);
@@ -449,7 +452,7 @@ float benchNoise(vec2 P)
 {
     float res = 0.0;
     float time = 0.0;
-    for (float i = 0; i < 999000; i++)
+    for (float i = 0; i < 2500000; i += 0.1)
     {
         res = cellular(vec3(P + time, i + 0.4)).x + 
 	      cellular(vec3(P + time, i + 0.4)).y +
@@ -481,8 +484,9 @@ vec3 brickTexture(vec2 coord) {
     float brickWidth = 0.7;
     float brickHeight = 0.5;
     float mortarWidth = 0.3;
-    
+
     vec2 brickCoord = fract(coord / vec2(brickWidth + mortarWidth, brickHeight + mortarWidth));
+
     bool isBrick = brickCoord.x < brickWidth && brickCoord.y < brickHeight;
     bool isMortar = (brickCoord.x < brickWidth && brickCoord.y < mortarWidth) ||
                     (brickCoord.x < mortarWidth && brickCoord.y < brickHeight);
@@ -503,21 +507,18 @@ vec3 brickTexture(vec2 coord) {
 vec3 metalTexture(vec2 coord, vec3 eyeDir) {
     float metalWidth = 0.7;
     float metalHeight = 0.5;
-    float metalMortarWidth = 0.15;
+    float metalMortarWidth = 0.195;
 
     vec2 metalCoord = fract(coord / vec2(metalWidth + metalMortarWidth, metalHeight + metalMortarWidth));
-    bool isMetal = metalCoord.x < metalWidth && metalCoord.y < metalHeight;
-    bool isMortar = (metalCoord.x < metalWidth && metalCoord.y < metalMortarWidth) ||
-                    (metalCoord.x < metalMortarWidth && metalCoord.y < metalHeight);
 
     vec2 metalCoordMin = floor(metalCoord * vec2(0.2 / metalWidth, 0.9 / metalHeight)) * vec2(metalWidth, metalHeight);
 
     vec2 fractCoord = metalCoord - metalCoordMin;
     float metalNoise = noisev4DTexture(metalCoord).r;
-    vec3 metalColor = mix(vec3(0.3804, 0.3647, 0.3647), vec3(0.298, 0.3137, 0.3059), metalNoise);
+    vec3 metalColor = mix(vec3(0.53804, 0.53647, 0.53647), vec3(0.6298, 0.63137, 0.63059), metalNoise);
 
     float steelNoise = noisev4DTexture(metalCoord).r;
-    vec3 steelColor = mix(vec3(0.333, 0.333, 0.333), vec3(0.4, 0.4, 0.4), steelNoise);
+    vec3 steelColor = mix(vec3(0.233, 0.233, 0.233), vec3(0.15, 0.15, 0.15), steelNoise);
     metalColor = mix(metalColor, steelColor, 0.7);
 
     vec3 metalColor00 = metalColor;
@@ -531,53 +532,54 @@ vec3 metalTexture(vec2 coord, vec3 eyeDir) {
     vec3 normal = normalize(vNormal);
     vec3 reflectDir = reflect(-eyeDir, normal);
     for (int i = 0; i < 31; i++) {
-        float specularStrength = pow(max(dot(reflectDir, normalize(vLightDir[i])), 0.0), 2048.0);
-        vec3 specularColor = vec3(0.33, 0.32, 0.32);    
+        float specularStrength = pow(max(dot(reflectDir, normalize(vLightDir[i])), 0.0), 8196.0);
+        vec3 specularColor = vec3(0.33, 0.32, 0.32);
         vec3 reflectionColor = specularStrength * specularColor;
         metalFinalColor = mix(metalFinalColor, reflectionColor, 0.77);
     }
 
     return metalFinalColor;
 }
-
 void main() {
-    vec3 color = vec3(0.28, 0.31, 0.27);
+    vec3 color = vec3(0.28, 0.15, 0.0027);
     vec3 finalColor = vec3(0.0);
     vec2 mirroredCoord = mod(vTextureCoord, 1.0);
     vec3 combinedLights = vec3(0.00);
     for (int i = 0; i < 31; i++)
     {
-    	combinedLights += vLightDir[i];
+        combinedLights += vLightDir[i];
     }
     vec3 noiseColor = noisev4DTexture(mirroredCoord);
     vec3 brickColor = brickTexture(mirroredCoord);
     vec3 metalColor = metalTexture(mirroredCoord, combinedLights);
-    
+    vec3 dcolor;
     for (int i = 0; i < 31; i++) {
         float diffuse = max(dot(vNormal, vLightDir[i]), 0.0);
         float specular = pow(max(dot(reflect(-vLightDir[i], vNormal), normalize(-vPosition)), 0.0), 2048.0);
 
         if (diffuse <= 0.2) {
-            color = vec3(0.27, 0.25, 0.24);
+            color = vec3(0.3, 0.3, 0.3);
         } else if (diffuse <= 0.4) {
-            color = vec3(0.39, 0.35, 0.34);
+            color = vec3(1.0, 0.3, 0.01);
         } else if (diffuse <= 0.6) {
             color = vec3(0.45, 0.4, 0.39);
         } else if (diffuse < 0.8) {
-            color = vec3(0.29, 0.27, 0.35);
+            color = vec3(0.29, 0.15, 0.035);
         } else {
-            color = vec3(0.34, 0.3, 0.28);
+            color = vec3(0.34, 0.34, 0.34);
         }
-        finalColor += color * diffuse + specular;
+        dcolor += color * diffuse + specular;
     }
-
+    float effectNoise = tdnoise(vec3(mirroredCoord * 100.0, 3.0));
+    vec3 effectColor = vec3(0.0, 0.0, 0.0);
+    float effectIntensity = 0.3 + effectNoise * 0.5;
+    finalColor += mix(dcolor, effectColor, effectIntensity);
     metalColor += metalColor * 2.0;
     metalColor += vec3(0.3529, 0.3294, 0.3294) * noiseColor.g;
     metalColor = mix(metalColor, vec3(0.302, 0.2941, 0.2941), noiseColor.r * 0.5);
     finalColor += metalColor;
-    finalColor *= mix(brickColor, noiseColor, 0.855);
+    finalColor *= mix(brickColor, noiseColor, 0.755);
     finalColor *= mix(vec3(0.3529, 0.3294, 0.3294), metalColor, noiseColor.g * 0.895);
-    finalColor *= color;
     float scanline = mod(gl_FragCoord.y, 2.0) > 0.5 ? 0.9 : 1.0;
     finalColor *= scanline;
     float radialGradient = length(vTextureCoord - vec2(0.5));
