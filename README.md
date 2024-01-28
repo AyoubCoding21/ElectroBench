@@ -125,18 +125,16 @@ make install && make clean && make all
 *v1.7-Beta:*
 
 ```sh
-sudo apt install git make -y --no-install-recommends
-git clone https://github.com/AyoubCoding21/ElectroBench/
-cd ElectroBench/ElectroBench-1.7-beta/
+sudo apt install unzip wget make -y --no-install-recommends
+wget https://github.com/AyoubCoding21/ElectroBench/archive/refs/tags/v1.7.zip && unzip v1.7.zip && cd ElectroBench-1.7/ElectroBench-1.7-beta/
 make install && make clean && make all
 ```
 
 *v1.8-Beta:*
 
 ```sh
-sudo apt install git make -y --no-install-recommends
-git clone https://github.com/AyoubCoding21/ElectroBench/
-cd ElectroBench/ElectroBench-1.8-beta/
+sudo apt install unzip wget make -y --no-install-recommends
+wget https://github.com/AyoubCoding21/ElectroBench/archive/refs/tags/v1.8.zip && unzip v1.8.zip && cd ElectroBench-1.8/ElectroBench-1.8-beta/
 make install && make clean && make all
 ```
 
@@ -144,9 +142,8 @@ make install && make clean && make all
 *v2.0-Beta:*
 
 ```sh
-sudo apt install git make -y --no-install-recommends
-git clone https://github.com/AyoubCoding21/ElectroBench/
-cd ElectroBench/ElectroBench-2.0-beta/
+sudo apt install unzip wget make -y --no-install-recommends
+wget https://github.com/AyoubCoding21/ElectroBench/archive/refs/tags/v2.0.zip && unzip v2.0.zip && cd ElectroBench-2.0/ElectroBench-2.0-beta/
 make install && make clean && make all
 ```
 
