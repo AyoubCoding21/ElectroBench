@@ -117,9 +117,8 @@ It's so simple, just follow the instructions for the versions you want to execut
 *v1.6-Beta:*
 
 ```sh
-sudo apt install git make -y --no-install-recommends
-git clone https://github.com/AyoubCoding21/ElectroBench/
-cd ElectroBench/ElectroBench-1.6-beta/
+sudo apt install unzip wget make -y --no-install-recommends
+wget https://github.com/AyoubCoding21/ElectroBench/archive/refs/tags/v1.6.zip && unzip v1.6.zip && cd ElectroBench-1.6/ElectroBench-1.6-beta/
 make install && make clean && make all
 ```
 
