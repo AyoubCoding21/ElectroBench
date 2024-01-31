@@ -11,7 +11,7 @@ int main(int argc, char **argv) {
 	glutReshapeFunc(changeSize);
 	glutKeyboardFunc(processKeys);
 
-	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClearColor(1.0, 1.0, 1.0, 1.0);
 
 	glewInit();
 	glxewInit();
