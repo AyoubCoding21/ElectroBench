@@ -1,3 +1,0 @@
-/data/data/com.termux/files/home/ElectroBench-1.6/ElectroBench-1.6-beta/build/CMakeFiles/ElectroBench.dir
-/data/data/com.termux/files/home/ElectroBench-1.6/ElectroBench-1.6-beta/build/CMakeFiles/edit_cache.dir
-/data/data/com.termux/files/home/ElectroBench-1.6/ElectroBench-1.6-beta/build/CMakeFiles/rebuild_cache.dir
