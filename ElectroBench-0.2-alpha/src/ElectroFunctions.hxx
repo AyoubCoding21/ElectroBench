@@ -96,7 +96,7 @@ inline void renderScene(void) {
         std::string title = "FPS : " + str_fps + " / Frame time : " + str_ft + " seconds";
         glutSetWindowTitle(title.c_str());
     }
-    if (timet >= 20000) {
+    if (timet >= 45000) {
         printf("Benchmark Results - Score : %f\n", (fps*9)/ft);
         exit(0); 
     }
