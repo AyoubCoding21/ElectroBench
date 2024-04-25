@@ -155,7 +155,7 @@ vec3 proceduralTexture(vec2 uv, float timeFactor) {
 vec3 pulsatingColor(float timeFactor) {
     float pulsationSpeed = 1.5;
     float pulsationIntensity = 0.1;
-    vec3 pulsatingColor = vec3(0.69, 0.69, 0.69);  // Adjust the base color as needed
+    vec3 pulsatingColor = vec3(0.69, 0.69, 0.69);  
     return pulsatingColor * (0.6 + pulsationIntensity * sin(timeFactor * pulsationSpeed));
 }
 vec2 waterDistortion(vec2 uv, float timeFactor) {
