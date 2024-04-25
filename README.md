@@ -10,7 +10,7 @@ In v0.2-alpha, We are using 3 noise types with high-precision and then mixing th
 In the screen is rendered a teapot and then applying the shaders on them.
 
 # How the score is calculated ?
-The score is calculated using fps*12/ft.
+The score is calculated using this formula : ```fps*12/ft```.
 
 # How to run ?
 
@@ -19,6 +19,7 @@ Debian-based Operating Systems:
 *v0.1-alpha*
 
 ```bash
+sudo apt install git -y --no-install-recommends
 git clone https://github.com/AyoubCoding21/ElectroBench
 cd ElectroBench/ElectroBench-0.1-alpha
 make install all
@@ -26,6 +27,7 @@ make install all
 
 *v0.2-alpha*
 ```bash
+sudo apt install git -y --no-install-recommends
 git clone https://github.com/AyoubCoding21/ElectroBench
 cd ElectroBench/ElectroBench-0.2-alpha
 make install clean all
