@@ -1,3 +1,0 @@
-/home/rowad/ElectroBench/ElectroBench-0.1-alpha/build/CMakeFiles/ElectroBench.dir
-/home/rowad/ElectroBench/ElectroBench-0.1-alpha/build/CMakeFiles/edit_cache.dir
-/home/rowad/ElectroBench/ElectroBench-0.1-alpha/build/CMakeFiles/rebuild_cache.dir

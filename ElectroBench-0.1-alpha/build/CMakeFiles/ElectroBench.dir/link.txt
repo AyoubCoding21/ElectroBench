@@ -1,1 +1,0 @@
-clang++  -v CMakeFiles/ElectroBench.dir/src/main.cxx.o -o ElectroBench  /usr/lib/x86_64-linux-gnu/libOpenGL.so /usr/lib/x86_64-linux-gnu/libGLX.so /usr/lib/x86_64-linux-gnu/libGLU.so /usr/lib/x86_64-linux-gnu/libglut.so /usr/lib/x86_64-linux-gnu/libGLEW.so 
