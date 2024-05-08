@@ -78,13 +78,8 @@ inline void changeSize(int w, int h) {
  * Renders the teapot, measures FPS / FrameTime and rotates the teapot.
  */
 inline void renderScene(void) {
-    static int frame = 0;
-    static int timebase = 0;
-    static double fps = 0.0;
-    static double ft = 0.0;
-
     frame++;
-    int timet = glutGet(GLUT_ELAPSED_TIME);
+    timet = glutGet(GLUT_ELAPSED_TIME);
 
     if (timet - timebase > 1000) {
         fps = frame * 1000.0 / (timet - timebase);
@@ -93,13 +88,10 @@ inline void renderScene(void) {
         ft = 1 / fps;
         std::string str_fps = std::to_string(fps);
         std::string str_ft = std::to_string(ft);
-        std::string title = "FPS : " + str_fps + " / Frame time : " + str_ft + " seconds";
+        std::string title = "FPS : " + str_fps + " / Frametime : " + str_ft + " seconds";
         glutSetWindowTitle(title.c_str());
     }
-    if (timet >= 45000) {
-        printf("Benchmark Results - Score : %f\n", (fps*9)/ft);
-        exit(0); 
-    }
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_MULTISAMPLE);
     glHint(GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
@@ -117,6 +109,7 @@ inline void renderScene(void) {
     b += 1.5;
     glutSwapBuffers();
 }
+
 /**
  * Processes keyboard input.
  * @param key The pressed key.

@@ -1,10 +1,8 @@
-#version 130
-precision highp float;
+#version 120 
 varying vec3 vNormal;
 varying vec3 vPosition;
 varying vec3 vLightDir[31];
 varying vec2 vTextureCoord;
-varying vec3 lightDirection;
 
 vec3 mod289(vec3 x)
 {
@@ -114,13 +112,82 @@ float snoise(vec3 v)
   return 105.0 * dot( m*m, vec4(dot(p0,x0), dot(p1,x1),
                                 dot(p2,x2), dot(p3,x3)));
 }
+// Classic Perlin noise
+float rand(vec3 P)
+{
+  vec3 Pi0 = floor(P); // Integer part for indexing
+  vec3 Pi1 = Pi0 + vec3(1.0); // Integer part + 1
+  Pi0 = mod289(Pi0);
+  Pi1 = mod289(Pi1);
+  vec3 Pf0 = fract(P); // Fractional part for interpolation
+  vec3 Pf1 = Pf0 - vec3(1.0); // Fractional part - 1.0
+  vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
+  vec4 iy = vec4(Pi0.yy, Pi1.yy);
+  vec4 iz0 = Pi0.zzzz;
+  vec4 iz1 = Pi1.zzzz;
+
+  vec4 ixy = permute(permute(ix) + iy);
+  vec4 ixy0 = permute(ixy + iz0);
+  vec4 ixy1 = permute(ixy + iz1);
+
+  vec4 gx0 = ixy0 * (1.0 / 7.0);
+  vec4 gy0 = fract(floor(gx0) * (1.0 / 7.0)) - 0.5;
+  gx0 = fract(gx0);
+  vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);
+  vec4 sz0 = step(gz0, vec4(0.0));
+  gx0 -= sz0 * (step(0.0, gx0) - 0.5);
+  gy0 -= sz0 * (step(0.0, gy0) - 0.5);
+
+  vec4 gx1 = ixy1 * (1.0 / 7.0);
+  vec4 gy1 = fract(floor(gx1) * (1.0 / 7.0)) - 0.5;
+  gx1 = fract(gx1);
+  vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);
+  vec4 sz1 = step(gz1, vec4(0.0));
+  gx1 -= sz1 * (step(0.0, gx1) - 0.5);
+  gy1 -= sz1 * (step(0.0, gy1) - 0.5);
+
+  vec3 g000 = vec3(gx0.x,gy0.x,gz0.x);
+  vec3 g100 = vec3(gx0.y,gy0.y,gz0.y);
+  vec3 g010 = vec3(gx0.z,gy0.z,gz0.z);
+  vec3 g110 = vec3(gx0.w,gy0.w,gz0.w);
+  vec3 g001 = vec3(gx1.x,gy1.x,gz1.x);
+  vec3 g101 = vec3(gx1.y,gy1.y,gz1.y);
+  vec3 g011 = vec3(gx1.z,gy1.z,gz1.z);
+  vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);
+
+  vec4 norm0 = taylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));
+  g000 *= norm0.x;
+  g010 *= norm0.y;
+  g100 *= norm0.z;
+  g110 *= norm0.w;
+  vec4 norm1 = taylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));
+  g001 *= norm1.x;
+  g011 *= norm1.y;
+  g101 *= norm1.z;
+  g111 *= norm1.w;
+
+  float n000 = dot(g000, Pf0);
+  float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));
+  float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
+  float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));
+  float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));
+  float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
+  float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));
+  float n111 = dot(g111, Pf1);
+
+  vec3 fade_xyz = fade(Pf0);
+  vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);
+  vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);
+  float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x);
+  return 2.2 * n_xyz;
+}
 vec2 cellular(vec3 P) {
 #define K 1/7
 #define Ko 1/2-K/2
 #define K2 1/49
 #define Kz 1/6
 #define Kzo 1/2-1/6*2
-#define jitter 1.7762844847 // smaller jitter gives more regular pattern
+#define jitter 1.9762844847 // smaller jitter gives more regular pattern
 
     vec3 Pi = mod289(floor(P));
     vec3 Pf = fract(P) - 0.5;
@@ -267,55 +334,15 @@ vec2 cellular(vec3 P) {
     return sqrt(d11.xy); // F1, F2
 #endif
 }
-vec2 cellular2D(vec2 P) {
-#define K2D 1/7
-#define Ko2D 3/7
-#define jitter2D 1.84125 // Less gives more regular pattern
-    vec2 Pi = mod289(floor(P));
-    vec2 Pf = fract(P);
-    vec3 oi = vec3(-1.0, 0.0, 1.0);
-    vec3 of = vec3(-0.5, 0.5, 1.5);
-    vec3 px = permute(Pi.x + oi);
-    vec3 p = permute(px.x + Pi.y + oi); // p11, p12, p13
-    vec3 ox = fract(p*K2D) - Ko2D;
-    vec3 oy = mod7(floor(p*K2D))*K2D - Ko2D;
-    vec3 dx = Pf.x + 0.5 + jitter2D*ox;
-    vec3 dy = Pf.y - of + jitter2D*oy;
-    vec3 d1 = dx * dx + dy * dy; // d11, d12 and d13, squared
-    p = permute(px.y + Pi.y + oi); // p21, p22, p23
-    ox = fract(p*K2D) - Ko2D;
-    oy = mod7(floor(p*K2D))*K2D - Ko2D;
-    dx = Pf.x - 0.5 + jitter2D*ox;
-    dy = Pf.y - of + jitter2D*oy;
-    vec3 d2 = dx * dx + dy * dy; // d21, d22 and d23, squared
-    p = permute(px.z + Pi.y + oi); // p31, p32, p33
-    ox = fract(p*K2D) - Ko2D;
-    oy = mod7(floor(p*K))*K2D - Ko2D;
-    dx = Pf.x - 1.5 + jitter2D*ox;
-    dy = Pf.y - of + jitter2D*oy;
-    vec3 d3 = dx * dx + dy * dy; // d31, d32 and d33, squared
-    // Sort out the two smallest distances (F1, F2)
-    vec3 d1a = min(d1, d2);
-    d2 = max(d1, d2); // Swap to keep candidates for F2
-    d2 = min(d2, d3); // neither F1 nor F2 are now in d3
-    d1 = min(d1a, d2); // F1 is now in d1
-    d2 = max(d1a, d2); // Swap to keep candidates for F2
-    d1.xy = (d1.x < d1.y) ? d1.xy : d1.yx; // Swap if smaller
-    d1.xz = (d1.x < d1.z) ? d1.xz : d1.zx; // F1 is in d1.x
-    d1.yz = min(d1.yz, d2.yz); // F2 is now not in d2.yz
-    d1.y = min(d1.y, d1.z); // nor in  d1.z
-    d1.y = min(d1.y, d2.x); // F2 is in d1.y, we're done.
-    return sqrt(d1.xy);
-}
 float benchNoise(vec2 P)
 {
     float res = 0.0;
     float time = 0.0;
-    for (float i = 0; i < 60; i++)
+    for (float i = 0; i < 200; i++)
     {
         res = cellular(vec3(P + time, i + 0.4)).x + 
               snoise(vec3(P + time, i + 0.8)) + 
-              cellular2D(P + time).x;
+              rand(vec3(P + time, i + 0.02)); 
         time += 0.5;
     }
     return res;
@@ -326,8 +353,6 @@ vec3 noisev4DTexture(vec2 coord) {
     vec2 fractCoord = coord - floorCoord;
     float noiseValue00 = benchNoise(floorCoord + time);
     float noiseValue01 = benchNoise(floorCoord + vec2(0.4, 0.2) + time);
-    float noiseValue11 = benchNoise(floorCoord + cellular2D(vec2(3)).x + time);
-    noiseValue01 += noiseValue11;
     float noiseValue = mix(noiseValue00, noiseValue01, fractCoord.x);
 
     return vec3(noiseValue);
@@ -340,15 +365,17 @@ vec3 brickTexture(vec2 coord) {
 
     vec2 brickCoord = fract(coord / vec2(brickWidth + mortarWidth, brickHeight + mortarWidth));
 
-    bool isBrick = true;
-    bool isMortar = true;
+    bool isBrick = brickCoord.x < brickWidth && brickCoord.y < brickHeight;
+    bool isMortar = (brickCoord.x < brickWidth && brickCoord.y < mortarWidth) ||
+                    (brickCoord.x < mortarWidth && brickCoord.y < brickHeight);
+
     vec2 brickCoordMin = floor(brickCoord * vec2(1.0 / brickWidth, 1.0 / brickHeight)) * vec2(brickWidth, brickHeight);
     vec2 brickCoordMax = brickCoordMin + vec2(brickWidth, brickHeight);
     vec2 fractCoord = brickCoord - brickCoordMin;
-    vec3 brickColor00 = mix(vec3(0.3922, 0.1922, 0.03922), vec3(0.3216, 0.3137, 0.3098), float(isMortar)) * float(isBrick);
-    vec3 brickColor01 = mix(vec3(0.5216, 0.502, 0.502), vec3(0.4078, 0.2882, 0.03804), float(isMortar) - 0.1) * float(isBrick);
-    vec3 brickColor10 = mix(vec3(0.3904, 0.1804, 0.03804), vec3(0.4078, 0.3961, 0.3922), float(isMortar)) * float(isBrick);
-    vec3 brickColor11 = mix(vec3(0.3843, 0.3843, 0.3843), vec3(0.5882, 0.15529, 0.05529), float(isMortar)) * float(isBrick);
+    vec3 brickColor00 = mix(vec3(0.4118, 0.3922, 0.3922), vec3(0.3216, 0.3137, 0.3098), float(isMortar)) * float(isBrick);
+    vec3 brickColor01 = mix(vec3(0.5216, 0.502, 0.4863), vec3(0.4078, 0.3882, 0.3804), float(isMortar)) * float(isBrick);
+    vec3 brickColor10 = mix(vec3(0.4667, 0.3804, 0.3216), vec3(0.4078, 0.3961, 0.3922), float(isMortar)) * float(isBrick);
+    vec3 brickColor11 = mix(vec3(0.4118, 0.3843, 0.3725), vec3(0.5882, 0.5529, 0.5529), float(isMortar)) * float(isBrick);
     vec3 brickColor0 = mix(brickColor00, brickColor01, fractCoord.y);
     vec3 brickColor1 = mix(brickColor10, brickColor11, fractCoord.y);
     vec3 brickColor = mix(brickColor0, brickColor1, fractCoord.x);
@@ -369,7 +396,7 @@ vec3 metalTexture(vec2 coord, vec3 eyeDir) {
     vec3 metalColor = mix(vec3(0.53804, 0.53647, 0.53647), vec3(0.6298, 0.63137, 0.63059), metalNoise);
 
     float steelNoise = noisev4DTexture(metalCoord).r;
-    vec3 steelColor = mix(vec3(0.233, 0.233, 0.233), vec3(0.2015, 0.2015, 0.2015), steelNoise);
+    vec3 steelColor = mix(vec3(0.233, 0.233, 0.233), vec3(0.15, 0.15, 0.15), steelNoise);
     metalColor = mix(metalColor, steelColor, 0.7);
 
     vec3 metalColor00 = metalColor;
@@ -386,7 +413,7 @@ vec3 metalTexture(vec2 coord, vec3 eyeDir) {
         float specularStrength = pow(max(dot(reflectDir, normalize(vLightDir[i])), 0.0), 8196.0);
         vec3 specularColor = vec3(0.33, 0.32, 0.32);
         vec3 reflectionColor = specularStrength * specularColor;
-        metalFinalColor = mix(metalFinalColor, reflectionColor, 0.6);
+        metalFinalColor = mix(metalFinalColor, reflectionColor, 0.77);
     }
 
     return metalFinalColor;
@@ -399,51 +426,61 @@ vec2 waterDistortion(vec2 uv, float timeFactor) {
 }
 
 void main() {
-    vec2 uv = gl_FragCoord.xy / vec2(1280.0, 1024.0);
+    vec2 uv = gl_FragCoord.xy / vec2(7850.0, 4320.0);
     float time = mod(gl_FragCoord.x + gl_FragCoord.y + gl_FragCoord.z + gl_FragCoord.w, 289.0);
     float timeFactor = 0.5 + 0.5 * sin(time * 0.1);
 
     uv = waterDistortion(uv, timeFactor);
-    vec3 color = vec3(0.52, 0.25, 0.015);
+    vec3 color = vec3(0.28, 0.15, 0.0027);
     vec3 finalColor = vec3(0.0);
     vec2 mirroredCoord = mod(vTextureCoord, 1.0);
-    vec3 combinedDirection = vec3(0.00);
+    vec3 combinedLights = vec3(0.00);
     for (int i = 0; i < 31; i++)
     {
-        combinedDirection += vLightDir[i];
+        combinedLights += vLightDir[i];
     }
     vec3 noiseColor = noisev4DTexture(uv);
     vec3 brickColor = brickTexture(uv);
-    vec3 metalColor = metalTexture(uv, combinedDirection);
-    vec3 normal = normalize(vNormal);
-    vec3 lightDir = normalize(lightDirection);
-    
-    float diffuse = max(dot(normal, lightDir), 0.0);
-    const int numReflections = 8;
-    vec3 reflections[numReflections];
-    for (int i = 0; i < numReflections; i++)
-    {
-        vec3 reflectionDir = reflect(-lightDir, normal);
-        reflections[i] = reflectionDir;
-        lightDir = normalize(reflect(lightDir, reflectionDir));
+    vec3 metalColor = metalTexture(uv, combinedLights);
+    vec3 dcolor;
+    for (int i = 0; i < 31; i++) {
+        float diffuse = max(dot(vNormal, vLightDir[i]), 0.0);
+        float specular = pow(max(dot(reflect(-vLightDir[i], vNormal), normalize(-vPosition)), 0.0), 2048.0);
+
+        if (diffuse <= 0.2) {
+            color = vec3(0.3, 0.3, 0.3);
+        } else if (diffuse <= 0.4) {
+            color = vec3(1.0, 0.3, 0.01);
+        } else if (diffuse <= 0.6) {
+            color = vec3(0.45, 0.4, 0.39);
+        } else if (diffuse < 0.8) {
+            color = vec3(0.29, 0.15, 0.035);
+        } else {
+            color = vec3(0.34, 0.34, 0.34);
+        }
+        dcolor += color * diffuse + specular;
     }
-    const float specularPower = 10.0;
-    vec3 speculars[numReflections];
-    for (int i = 0; i < numReflections; i++)
-    {
-        vec3 viewDir = normalize(-gl_FragCoord.xyz);
-        vec3 reflectionDir = reflections[i];
-        float specularTerm = pow(max(dot(reflectionDir, viewDir), 0.0), specularPower*specularPower);
-        speculars[i] = specularTerm * vec3(0.9, 0.45, 0.01);
-    }
-    float fresnel = clamp(1.0 - dot(normalize(gl_FragCoord.xyz), normal), 0.0, 1.0);
-    vec3 fresnelColor = vec3(0.02, 0.1, 0.6) * fresnel;
-    vec3 dcolor = vec3(0.2) + vec3(0.8) * diffuse + speculars[0] + speculars[1] + speculars[2] + speculars[3] + speculars[4] + speculars[5] + speculars[6] + fresnelColor;
+    float effectNoise = snoise(vec3(mirroredCoord * 100.0, 3.0));
+    vec3 effectColor = vec3(0.0, 0.0, 0.0);
+    float effectIntensity = 0.3 + effectNoise * 0.5;
+    finalColor += mix(dcolor, effectColor, effectIntensity);
+    float shadowNoise = snoise(vec3(uv * 100.0, 3.0));
+    vec3 shadowColor = vec3(0.0);
+    float shadowIntensity = 0.5 + shadowNoise * 0.6;
+    finalColor = mix(finalColor, shadowColor, shadowIntensity);
     metalColor += metalColor * 2.0;
     metalColor += vec3(0.3529, 0.3294, 0.3294) * noiseColor.g;
-    metalColor = mix(metalColor, vec3(0.2941, 0.2941, 0.2941), 0.395);
-    finalColor = mix(metalColor, noiseColor, 0.48);
-    finalColor *= mix(brickColor, dcolor, 1) + (brickColor - vec3(0.25, 0.25, 0.25));
-    finalColor *= mix(vec3(0.75294, 0.37294, 0.07294), metalColor, noiseColor.r * 0.7);
+    metalColor = mix(metalColor, vec3(0.302, 0.2941, 0.2941), noiseColor.r * 0.5);
+    finalColor += metalColor;
+    finalColor *= mix(brickColor, noiseColor, 0.755);
+    finalColor *= mix(vec3(0.3529, 0.3294, 0.3294), metalColor, noiseColor.g * 0.895);
+    float scanline = mod(gl_FragCoord.y, 2.0) > 0.5 ? 0.9 : 1.0;
+    finalColor *= scanline;
+    float radialGradient = length(vTextureCoord - vec2(0.5));
+    finalColor *= mix(1.0, 0.5, radialGradient);
+    float distortion = sin(vTextureCoord.y * 30.0);
+    finalColor *= mix(1.0, 0.5, distortion);
+    float curvature = length(vNormal - normalize(vNormal)) * 10.0;
+    finalColor -= vec3(curvature);
     gl_FragColor = vec4(finalColor, 1.0);
 }
