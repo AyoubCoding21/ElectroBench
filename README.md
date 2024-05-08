@@ -5,7 +5,7 @@ It uses OpenGL 2.1/3.0, and C++, and uses Make and CMake for compilation. It is 
 # Effects
 So in v0.1-alpha, We are using lambertian + blinn-phong lighting, and FBM based-off 3D Simplex noise to make a procedural texture and then mixing the lighting and the texture together, and then adding some effects, like bloom, pulsating color, uv distortion, shadowing and vignette effect, also the benchmark calculates the score and prints in the terminal.
 
-In v0.2-alpha, We are using 3 noise types with high-precision and then mixing them and re-mixing them, then we use phong lighting with no ambient color + frensel reflection, and we use material procedural textures using noising, like brick texture and metal textures and noise color and then mixing them with lighting and showing it on the screen.
+In v0.2-alpha, We are using 3 noise types with high-precision and then mixing them and re-mixing them, then we use phong reflection lighting to give the teapot a metallic apperance, and we use material procedural textures using noising, like brick texture and metal textures and noise color and then mixing them with lighting and showing it on the screen.
 
 In the screen is rendered a teapot and then applying the shaders on them.
 
