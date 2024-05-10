@@ -1,5 +1,5 @@
 # ElectroBench
-ElectroBench is a 45-second long benchmark specifiacally designed to run on old and modern PCs, don't critise it by it using OpenGL 2.1/3.0, and GLSL 1.2/1.3, Even office PCs have low scores at it.
+ElectroBench is a 45-second long benchmark specifiacally designed to run on old and modern PCs, don't critise it by it using OpenGL 2.1/3.0, and GLSL 1.2/1.3, Even office PCs cannot run it.
 It uses OpenGL 2.1/3.0, and C++, and uses Make and CMake for compilation. It is designed to be a replacement for glmark (even though it is great and I used it before).
 
 # Effects
@@ -10,7 +10,7 @@ In v0.2-alpha, We are using 3 noise types with high-precision and then mixing th
 In the screen is rendered a teapot and then applying the shaders on them.
 
 # How the score is calculated ?
-The score is calculated using this formula : ```fps*12/ft```.
+The score is calculated using this formula : ```fps*9/ft```.
 
 # How to run ?
 
@@ -22,7 +22,7 @@ Debian-based Operating Systems:
 sudo apt install git -y --no-install-recommends
 git clone https://github.com/AyoubCoding21/ElectroBench
 cd ElectroBench/ElectroBench-0.1-alpha
-make install all
+make install clean all
 ```
 
 *v0.2-alpha*

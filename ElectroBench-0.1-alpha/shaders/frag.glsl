@@ -124,21 +124,21 @@ vec3 proceduralTexture(vec2 uv, float timeFactor) {
     float fbmValue3 = fbm(vec3(uv * 10.0, timeFactor * 1.5));
 
     float noiseValue1 = 0.0;
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < 20; i++) {
         float t = timeFactor * float(i) * 0.1;
         noiseValue1 += snoise(vec3(uv * 10.0, t)) + fbmValue1;
     }
     noiseValue1 /= 5.0;
 
     float noiseValue2 = 0.0;
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < 20; i++) {
         float t = timeFactor * float(i) * 0.2;
         noiseValue2 += snoise(vec3(uv * 10.0, t)) + fbmValue2;
     }
     noiseValue2 /= 5.0;
 
     float noiseValue3 = 0.0;
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < 20; i++) {
         float t = timeFactor * float(i) * 0.3;
         noiseValue3 += snoise(vec3(uv * 10.0, t)) + fbmValue3;
     }

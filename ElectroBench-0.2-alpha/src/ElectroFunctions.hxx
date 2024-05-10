@@ -92,6 +92,11 @@ inline void renderScene(void) {
         glutSetWindowTitle(title.c_str());
     }
 
+    if (timet >= 45000)
+    {
+        printf("Benchmark Results - Score : %f\n", (fps*9)/ft);
+        exit(0);
+    }
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_MULTISAMPLE);
     glHint(GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
