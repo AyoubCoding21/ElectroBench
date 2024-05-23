@@ -22,7 +22,7 @@ Debian-based Operating Systems:
 sudo apt install git -y --no-install-recommends
 git clone https://github.com/AyoubCoding21/ElectroBench
 cd ElectroBench/ElectroBench-0.1-alpha
-make install clean all
+make install all
 ```
 
 *v0.2-alpha*
@@ -30,7 +30,7 @@ make install clean all
 sudo apt install git -y --no-install-recommends
 git clone https://github.com/AyoubCoding21/ElectroBench
 cd ElectroBench/ElectroBench-0.2-alpha
-make install clean all
+make install all
 ```
 
 # Donating
