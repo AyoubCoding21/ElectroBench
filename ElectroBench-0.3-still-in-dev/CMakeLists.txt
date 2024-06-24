@@ -1,13 +1,26 @@
 cmake_minimum_required(VERSION 3.12)
 project(ElectroBench)
 
-find_package(OpenGL REQUIRED)
-find_package(GLUT REQUIRED)
-find_package(GLEW REQUIRED)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/conan/deb")
+find_package(glew REQUIRED)
+find_package(FreeGLUT)
+find_package(GTest)
+find_package(mesa-glu)
+find_package(opengl_system)
+find_package(xkbcommon)
+
 set(SOURCES src/main.cxx)
 add_executable(ElectroBench ${SOURCES})
 target_include_directories(ElectroBench PRIVATE ${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS})
-target_link_libraries(ElectroBench PRIVATE ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARIES})
+
+
+# Need to use the Conan targets instead
+target_link_libraries(ElectroBench
+ PRIVATE
+  FreeGLUT::freeglut_static
+  GLEW::GLEW
+  opengl::opengl
+)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -v")
 set(CMAKE_C_COMPILER "clang")

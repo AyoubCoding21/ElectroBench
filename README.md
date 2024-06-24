@@ -43,3 +43,19 @@ make install all
 # Donating
 
 Send me an e-mail : ayoubprogramming96@outlook.com
+
+# Build Instructions for v0.3
+
+Make sure you have `conan 2` installed and then run the following
+command on your machine:
+
+```sh
+conan install . --output-folder="conan/deb" -sbuild_type=Debug --build=missing
+```
+
+To configure CMake, don't forget to pass `CMAKE\_TOOLCHAIN\_FILE":
+
+```sh
+cmake . -DCMAKE_TOOLCHAIN_FILE="$(pwd)/conan/deb/conan_toolchain.cmake"
+```
+
