@@ -1,18 +1,39 @@
 // Libraries to include
 
 #include <GL/glew.h>
+#include <GL/gl.h>
 #include <GL/freeglut.h>
 #include <GL/freeglut_std.h>
 #include "obj.hxx"
-#include <GL/glxew.h>
+#include <GL/glxew.h> // This only really works on windows
+
+#include <array>
 #include <cstdio>
-#include <iostream>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <fstream>
+#include <iostream>
+#include <iterator>
 #include <string>
 
 #define NAME "ElectroBench" // The window name.
+
+
+// Anonymous namespace
+namespace
+{
+  void initialiseWindow(int argc, char** argv)
+  {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE);
+    glutInitWindowSize(WIDTH, HEIGHT);
+    glutCreateWindow(NAME);
+    glEnable(GL_MULTISAMPLE);
+    glHint(GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
+    glutSetOption(GLUT_MULTISAMPLE, 8);
+  }
+} // namespace
 
 // Global variables
 GLuint vert, frag, program;
@@ -32,28 +53,14 @@ bool is_updated = false;
 Model model;
 
 // Reads the contents of a text file.
-char *textFileRead(const char *filename) {
-  FILE *fp;
-  char *content = NULL;
-  int count = 0;
-
-  if (filename != NULL) {
-    fp = fopen(filename, "rt");
-
-    if (fp != NULL) {
-      fseek(fp, 0, SEEK_END);
-      count = ftell(fp);
-      rewind(fp);
-
-      if (count > 0) {
-        content = (char *)malloc(sizeof(char) * (count + 1));
-        count = fread(content, sizeof(char), count, fp);
-        content[count] = '\0';
-      }
-      fclose(fp);
-    }
+std::string textFileRead(std::string const& filename) {
+  if (!filename.empty())
+  {
+    std::fstream file{filename};
+    return {(std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>()};
   }
-  return content;
+
+  return {};
 }
 
 // Changes the size of the window.
@@ -127,17 +134,16 @@ int printGLError(const char *file, int line) {
 
 // Prints the compile info log for a shader.
 void printShaderInfoLog(GLuint object) {
-  int infologLength = 0;
-  int charsWritten = 0;
-  char *infoLog;
+  constexpr std::size_t MAX_LOG_LENGTH = 100;
+  std::array<char, MAX_LOG_LENGTH> log_buffer{};
 
+  int infologLength = 0;
   glGetShaderiv(object, GL_INFO_LOG_LENGTH, &infologLength);
 
   if (infologLength > 0) {
-    infoLog = (char *)malloc(infologLength);
-    glGetShaderInfoLog(object, infologLength, &charsWritten, infoLog);
-    printf("%s\n", infoLog);
-    free(infoLog);
+    int charsWritten = 0;
+    glGetShaderInfoLog(object, MAX_LOG_LENGTH, &charsWritten, log_buffer.data());
+    printf("%s\n", log_buffer.data());
   }
 }
 
@@ -218,72 +224,74 @@ void motion(int x, int y) {
  * Compiles shaders and sets up attributes and loads the obj file.
 */
 void init() {
-    char *vs = NULL, *fs = NULL;
 
-    GLuint vert = glCreateShader(GL_VERTEX_SHADER);
-    GLuint frag = glCreateShader(GL_FRAGMENT_SHADER);
+  // Do check if you don't have a 0-id
+  GLuint vert = glCreateShader(GL_VERTEX_SHADER);
+  if (vert == 0)
+  {
+    // Log something and then exit
+    std::terminate();
+  }
+  GLuint frag = glCreateShader(GL_FRAGMENT_SHADER);
+  if (frag == 0)
+  {
+    // Log something and the exit
+    std::terminate();
+  }
 
-    vs = textFileRead("shaders/vert.glsl");
-    fs = textFileRead("shaders/frag.glsl");
+  std::string const vs = textFileRead("shaders/vert.glsl");
+  std::string const fs = textFileRead("shaders/frag.glsl");
 
-    const char *vv = vs;
-    const char *ff = fs;
+  const char* vs_ptr = vs.data();
+  const char* fs_ptr = fs.data();
+  glShaderSource(vert, 1, &vs_ptr, NULL);
+  glShaderSource(frag, 1, &fs_ptr, NULL);
 
-    glShaderSource(vert, 1, &vv, NULL);
-    glShaderSource(frag, 1, &ff, NULL);
+  glCompileShader(vert);
+  glCompileShader(frag);
 
-    free(vs);
-    free(fs);
+  printShaderInfoLog(vert);
+  printShaderInfoLog(frag);
 
-    glCompileShader(vert);
-    glCompileShader(frag);
+  GLuint program = glCreateProgram();
+  glAttachShader(program, vert);
+  glAttachShader(program, frag);
 
-    printShaderInfoLog(vert);
-    printShaderInfoLog(frag);
+  glLinkProgram(program);
+  printProgramInfoLog(program);
 
-    GLuint program = glCreateProgram();
-    glAttachShader(program, vert);
-    glAttachShader(program, frag);
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  gluPerspective(20.0, 1.0, 1.0, 2000.0);
+  glMatrixMode(GL_MODELVIEW);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glEnable(GL_LINE_SMOOTH);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glEnable(GL_TEXTURE_2D);
+  glEnable(GL_DEPTH_TEST);
+  model.load(model_name.c_str());
+  pos_x = model.pos_x;
+  pos_y = model.pos_y;
+  pos_z = model.pos_z - 1.0f;
+  zoom_per_scroll = -model.pos_z / 8.0f;
 
-    glLinkProgram(program);
-    printProgramInfoLog(program);
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(20.0, 1.0, 1.0, 2000.0);
-    glMatrixMode(GL_MODELVIEW);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_LINE_SMOOTH);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_DEPTH_TEST);
-    model.load(model_name.c_str());
-    pos_x = model.pos_x;
-    pos_y = model.pos_y;
-    pos_z = model.pos_z - 1.0f;
-    zoom_per_scroll = -model.pos_z / 8.0f;
-
-    GLint textureLocation = glGetUniformLocation(program, "uTexture");
-    glUniform1i(textureLocation, 0);
-    glUseProgram(program);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, model.m->texture);
+  GLint textureLocation = glGetUniformLocation(program, "uTexture");
+  glUniform1i(textureLocation, 0);
+  glUseProgram(program);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, model.m->texture);
 }
 
 
 int main(int argc, char **argv) {
   // Initialising GLUT
-  glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE);
-  glutInitWindowSize(WIDTH, HEIGHT);
-  glutCreateWindow(NAME);
-  glEnable(GL_MULTISAMPLE);
-  glHint(GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
-  glutSetOption(GLUT_MULTISAMPLE, 8);
+  
+  // Create a separate function and name it something like
+  initialiseWindow(argc, argv);
 
   glClearColor(0.2, 0.1, 0.01, 1.0);
 
