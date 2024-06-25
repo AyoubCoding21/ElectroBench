@@ -10,7 +10,7 @@ In v0.2-alpha, We are using 3 noise types with high-precision and then mixing th
 In the screen is rendered a teapot and then applying the shaders on them.
 
 # How the score is calculated ?
-The score is calculated using this formula : ```fps*12/ft```.
+The score is calculated using this formula : ```fps*4/frametime```.
 
 # How to run ?
 
