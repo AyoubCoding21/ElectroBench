@@ -32,13 +32,6 @@ git clone https://github.com/AyoubCoding21/ElectroBench
 cd ElectroBench/ElectroBench-0.2-alpha
 make install clean all
 ```
-*v0.3-still-in-dev*
-```bash
-sudo apt install git -y --no-install-recommends
-git clone https://github.com/AyoubCoding21/ElectroBench
-cd ElectroBench/ElectroBench-0.3-still-in-dev
-make install all
-```
 
 # Donating
 
