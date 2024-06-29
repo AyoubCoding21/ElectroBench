@@ -18,7 +18,7 @@ The score is calculated using this formula : ```fps*4/frametime``` (in version 0
 
 For v0.1 and v0.2 : ```fps*9/frametime```.
 
-# PS : 0.1-alpha and 0.2-alpha are considered now stable and aren't maintianed anymore.
+### PS : 0.1-alpha and 0.2-alpha are considered now stable and aren't maintianed anymore.
 
 # How to run ?
 
@@ -60,3 +60,9 @@ cd ..
 # Donating
 
 Send me an e-mail : ayoubprogramming96@outlook.com
+
+# Special thanks
+
+@franramirez688 : for fixing an issue with pulseaudio/14.2 recipe when installing sdl2 in conan2
+
+@matheusgomes28 : for giving me ideas and tips to improve the project, and he was the origin of me using conan for the next ElectroBench versions.
