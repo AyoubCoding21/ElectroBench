@@ -15,7 +15,6 @@ float ambientOcclusionRadius = 0.1;
 float reflectionRayLength = 10.0;
 float PI = 3.14159265359;
 
-// Utility functions for noise generation
 vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
 vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
 vec3 permute(vec3 x) { return mod289((34.0 * x + 1.0) * x); }
@@ -63,8 +62,6 @@ vec2 rand(vec2 P) {
 	return sqrt(d1.xy);
 }
 
-
-// Disney PBR functions
 float DistributionGGX(vec3 N, vec3 H, float roughness) {
     float a = roughness * roughness;
     float a2 = a * a;
@@ -101,7 +98,6 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0) {
     return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
 }
 
-// Subsurface scattering
 vec3 subsurfaceScattering(vec3 color, vec3 normal, vec3 lightDir, vec3 viewDir) {
     float NdotL = max(dot(normal, lightDir), 0.0);
     float NdotV = max(dot(normal, viewDir), 0.0);
@@ -113,14 +109,13 @@ vec3 subsurfaceScattering(vec3 color, vec3 normal, vec3 lightDir, vec3 viewDir) 
     return color * scatteringAmount * NdotL * falloff;
 }
 
-// Reflection tracing
 vec3 traceReflection(vec3 origin, vec3 direction) {
     vec3 color = vec3(0.0);
     vec3 currentPosition = origin;
     vec3 currentDirection = direction;
-    float reflectivity = 0.8; // Reflection intensity
+    float reflectivity = 0.8;
 
-    for (int i = 0; i < 2048; i++) { // Increased reflection depth
+    for (int i = 0; i < 2048; i++) {
         vec4 sampleColor = texture2D(uTexture, currentPosition.st);
         color += sampleColor.rgb * pow(max(dot(currentDirection, normalize(vNormal)), 0.0), 1024.0);
         currentDirection = reflect(currentDirection, normalize(vNormal));
