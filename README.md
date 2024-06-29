@@ -50,6 +50,7 @@ command on your machine after cloning repo and going into the 0.3 directory:
 
 ```sh
 conan install . --output-folder="conan/deb" -sbuild_type=Debug --build=missing -pr conanprofile
+mkdir build 
 cmake . -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=conan/deb/conan_toolchain.cmake -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_BUILD_TYPE=Debug -B build/
 cd build/
 make
