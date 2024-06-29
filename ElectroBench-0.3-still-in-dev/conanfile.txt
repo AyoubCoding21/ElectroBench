@@ -1,9 +1,0 @@
-[requires]
-freeglut/3.4.0
-glew/2.2.0
-gtest/1.13.0
-opengl/system
-
-[generators]
-CMakeDeps
-CMakeToolchain
