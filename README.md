@@ -63,6 +63,6 @@ Send me an e-mail : ayoubprogramming96@outlook.com
 
 # Special thanks
 
-(Fransisco Ramirez)[https://github.com/franramirez688] : for fixing an issue with pulseaudio/14.2 recipe when installing sdl2 in conan2
+[Fransisco Ramirez](https://github.com/franramirez688) : for fixing an issue with pulseaudio/14.2 recipe when installing sdl2 in conan2
 
-(Matheus Gomes)[https://github.com/matheusgomes28] : for giving me ideas and tips to improve the project, and he was the origin of me using conan for the next ElectroBench versions.
+[Matheus Gomes](https://github.com/matheusgomes28) : for giving me ideas and tips to improve the project, and he was the origin of me using conan for the next ElectroBench versions.
