@@ -1,6 +1,6 @@
 # Blender v3.3.1 OBJ File: ''
 # www.blender.org
-mtllib OBJ.mtl
+mtllib ak.mtl
 o Cylinder
 v -0.002755 0.693558 0.491448
 v -0.007745 0.674935 0.491448
