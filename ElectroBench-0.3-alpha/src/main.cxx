@@ -62,7 +62,7 @@ int fps;
 int x_old = 0, y_old = 0;
 int current_scroll = 5;
 float zoom_per_scroll;
-std::string model_name = "src/ak.obj";
+std::string model_name = "src/Teapot.obj";
 
 bool is_holding_mouse = false;
 bool is_updated = false;

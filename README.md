@@ -11,7 +11,6 @@ In the screen is rendered a teapot and then applying the shaders on them.
 
 In 0.3, We are using Disney PBR specular term, Lambertian diffuse term and ambient occulsion sampling with noising and we are loading a teapot obj with a texture into the screen, you can zoom-in by scrolling up and zoom-out by scrolling down.
 
-Also, in 0.3, We used SDL2 with Conan and loaded an AK47 obj instead of a teapot.
 It's recommended in the benchmark that you zoom in into the maximum in v0.3 to maximize GPU utilisation.
 
 # How the score is calculated ?
