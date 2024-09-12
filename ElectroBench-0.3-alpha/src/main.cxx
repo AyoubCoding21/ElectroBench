@@ -98,6 +98,7 @@ void renderScene()
     model3.draw();
     glTranslatef(pos_x+5.0f, pos_y, pos_z);
     model4.draw();
+    glUniform1f(glGetUniformLocation(program, "timeFactor"), (float)SDL_GetPerformanceCounter() / (float)SDL_GetPerformanceFrequency());
     SDL_GL_SwapWindow(window);
 
     frame++;
@@ -118,6 +119,7 @@ void renderScene()
         SDL_Quit();
         exit(0);
     }
+
 }
 
 // Processes keyboard input.
@@ -317,13 +319,12 @@ void setup()
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, model.m->texture1);
   glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, model2.m->texture2);
+  glBindTexture(GL_TEXTURE_2D, model.m->texture2);
   glActiveTexture(GL_TEXTURE2);
-  glBindTexture(GL_TEXTURE_2D, model3.m->texture3);
+  glBindTexture(GL_TEXTURE_2D, model.m->texture3);
   glUniform1i(glGetUniformLocation(program, "uTexture"), 0);
   glUniform1i(glGetUniformLocation(program, "uTexture2"), 1);
   glUniform1i(glGetUniformLocation(program, "uTexture3"), 2);
-  glUniform1f(glGetUniformLocation(program, "timeFactor"), (float)SDL_GetPerformanceCounter() / (float)SDL_GetPerformanceFrequency());
 }
 
 
