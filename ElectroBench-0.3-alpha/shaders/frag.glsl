@@ -6,9 +6,9 @@ uniform sampler2D uTexture;  // Original texture
 uniform sampler2D uTexture2; // Second texture
 uniform sampler2D uTexture3;
 
-varying vec3 vNormal;
-varying vec3 vPosition;
-varying vec2 vTexCoord;
+in vec3 vNormal;
+in vec3 vPosition;
+in vec2 vTexCoord;
 
 // Parameters for lighting
 vec3 lightColors[4] = vec3[](
