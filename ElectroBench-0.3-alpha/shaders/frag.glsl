@@ -54,9 +54,9 @@ void main() {
     vec3 albedo2 = texture2D(uTexture2, vTexCoord).rgb;
     vec3 albedo3 = texture2D(uTexture3, vTexCoord).rgb;
     // Combine the textures (e.g., mix them based on a factor)
-    float mixFactor = 0.6; // You can adjust or compute this dynamically
+    float mixFactor = 0.4; // You can adjust or compute this dynamically
     vec3 albedo = mix(albedo1, albedo2, mixFactor);
-    albedo += mix(albedo2, albedo3, 0.415);
+    albedo += mix(albedo2, albedo3, 0.4);
 
     vec3 finalDiffuse = vec3(0.0);
     vec3 finalSpecular = vec3(0.0);
@@ -82,13 +82,11 @@ void main() {
     // Fresnel effect
     float fresnel = pow(1.0 - dot(viewDir, normal), fresnelPower);
     vec3 fresnelEffect = fresnel * specularColor;
-
-    // Combine results for a metallic look
-    vec3 metallicColor = ambientColor * albedo + finalDiffuse * (1.0 - metallic) + finalSpecular * metallic + fresnelEffect;
+    vec3 color  = ambientColor * albedo + finalDiffuse * (1.0 - metallic) + finalSpecular * metallic + fresnelEffect;
 
     // Dynamic effect based on time
     float wave = sin(vPosition.x * 0.5 + timeFactor) * 0.5 + 0.5;
-    vec3 finalColor = metallicColor * wave;
+    vec3 finalColor = color * wave;
 
     gl_FragColor = vec4(finalColor, 1.0);
 }
