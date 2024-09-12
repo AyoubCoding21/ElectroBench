@@ -22,7 +22,7 @@
 #define INTERVAL 0
 
 class Model {
-  private:
+private:
     static int count_char(std::string &str, char ch) {
         int c = 0;
         int length = str.length() - 1;
@@ -43,22 +43,26 @@ class Model {
     }
 
     class Material {
-      public:
+    public:
         float *ambient;
         float *diffuse;
         float *specular;
-        GLuint texture;
+        GLuint texture1;
+        GLuint texture2;
+        GLuint texture3;
 
         Material(float *ambient, float *diffuse, float *specular) {
             this->ambient = ambient;
             this->diffuse = diffuse;
             this->specular = specular;
-            this->texture = 0;
+            this->texture1 = 0;
+            this->texture2 = 0;
+            this->texture3 = 0;
         }
     };
 
     class Face {
-      public:
+    public:
         int edge;
         int *vertices;
         int *texcoords;
@@ -82,7 +86,9 @@ class Model {
     std::vector<Face> faces;
 
     GLuint list;
-    public: Material *m;
+public:
+    Material *m;
+
     void load_material(const char *filename) {
         std::string line;
         std::vector<std::string> lines;
@@ -92,8 +98,7 @@ class Model {
             return;
         }
 
-        while (!in.eof()) {
-            std::getline(in, line);
+        while (std::getline(in, line)) {
             lines.push_back(line);
         }
         in.close();
@@ -127,21 +132,37 @@ class Model {
                     break;
                 }
             } else if (line[0] == 'm' && line[1] == 'a') {
-                sscanf(line.c_str(), "map_Kd %s", str);
-                std::string file = prefix + str;
-                Image img;
-                Load_Texture_Swap(&img, file.c_str());
-                glGenTextures(1, &(m->texture));
-                glBindTexture(GL_TEXTURE_2D, m->texture);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.w, img.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.img);
-                glBindTexture(GL_TEXTURE_2D, 0);
-
-                Delete_Image(&img);
+                if (strstr(line.c_str(), "map_Kd")) {
+                    sscanf(line.c_str(), "map_Kd %s", str);
+                    std::string file = prefix + str;
+                    load_texture_to_material(file, m->texture1, 0);
+                }
+                if (strstr(line.c_str(), "map_Ks")) {
+                    sscanf(line.c_str(), "map_Ks %s", str);
+                    std::string file2 = prefix + str;
+                    load_texture_to_material(file2, m->texture2, 1);
+                }
+                if(strstr(line.c_str(), "map_Kxd"))
+                {
+                    sscanf(line.c_str(), "map_Kxd %s", str);
+                    std::string file3 = prefix + str;
+                    load_texture_to_material(file3, m->texture3, 2);
+                }
             }
         }
     }
 
+    void load_texture_to_material(const std::string& file, GLuint& texture, int i) {
+        Image img;
+        Load_Texture_Swap(&img, file.c_str());
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.w, img.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.img);
+        glBindTexture(GL_TEXTURE_2D, i);
+        Delete_Image(&img);
+    
+    }
     void add_face_3v(std::string &line) {
         int v0, v1, v2;
         sscanf(line.c_str(), "f %d %d %d", &v0, &v1, &v2);
@@ -308,9 +329,19 @@ class Model {
                 glLightfv(GL_LIGHT0, GL_AMBIENT, materials[face.normal].ambient);
                 glLightfv(GL_LIGHT0, GL_DIFFUSE, materials[face.normal].diffuse);
                 glLightfv(GL_LIGHT0, GL_SPECULAR, materials[face.normal].specular);
-                if (materials[face.normal].texture != 0) {
+                if (materials[face.normal].texture1 != 0) {
                     has_texcoord = true;
-                    glBindTexture(GL_TEXTURE_2D, materials[face.normal].texture);
+                    glBindTexture(GL_TEXTURE_2D, materials[face.normal].texture1);
+                }
+                if (materials[face.normal].texture2 != 0)
+                {
+                    has_texcoord = true;
+                    glBindTexture(GL_TEXTURE_2D, materials[face.normal].texture2);
+                }
+                if (materials[face.normal].texture3 != 0)
+                {
+                    has_texcoord = true;
+                    glBindTexture(GL_TEXTURE_2D, materials[face.normal].texture3);
                 }
                 continue;
             }
@@ -336,13 +367,6 @@ class Model {
         }
         glEndList();
 
-        printf("Model: %s\n", filename);
-        printf("Vertices: %d\n", (int)vertices.size());
-        printf("Texcoords: %d\n",(int)texcoords.size());
-        printf("Normals: %d\n", (int)normals.size());
-        printf("Faces: %d\n", (int)faces.size());
-        printf("Materials: %d\n", (int)materials.size());
-
         sum_x /= vertices.size();
         sum_y /= vertices.size();
         sum_z /= vertices.size();
@@ -351,10 +375,6 @@ class Model {
         pos_y /= vertices.size();
         pos_y = -pos_y;
         pos_z = -sqrt(sum_x * sum_x + sum_y * sum_y + sum_z * sum_z) * 15;
-
-        printf("Pos_X: %f\n", pos_x);
-        printf("Pos_Y: %f\n", pos_y);
-        printf("Pos_Z: %f\n", pos_z);
 
         for (Material &material : materials) {
             delete material.ambient;

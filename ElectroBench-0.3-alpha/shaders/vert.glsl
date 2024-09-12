@@ -1,4 +1,6 @@
-#version 120
+#version 130
+
+precision highp float;
 
 // Varying to pass texture coordinates to the fragment shader
 varying vec3 vNormal;
