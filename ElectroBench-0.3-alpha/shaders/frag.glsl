@@ -11,21 +11,30 @@ in vec3 vPosition;
 in vec2 vTexCoord;
 
 // Parameters for lighting
-vec3 lightColors[4] = vec3[](
+vec3 lightColors[8] = vec3[](
     vec3(1.0, 0.9, 0.8),
     vec3(0.8, 0.8, 1.0),
     vec3(0.6, 1.0, 0.6),
-    vec3(1.0, 1.0, 0.8)
+    vec3(1.0, 1.0, 0.8),
+    vec3(1.0, 0.5, 0.08),
+    vec3(0.9, 0.8, 0.7),
+    vec3(0.3, 0.4, 0.5),
+    vec3(0.5, 0.5, 0.5)
 );
-vec3 lightPositions[4] = vec3[](
+vec3 lightPositions[8] = vec3[](
     vec3(10.0, 10.0, 10.0),
     vec3(-10.0, 5.0, 5.0),
     vec3(5.0, -10.0, 5.0),
-    vec3(-5.0, 10.0, -5.0)
+    vec3(-5.0, 10.0, -5.0),
+    vec3(-7.0, 0.0, 1.0),
+    vec3(-10.0, 5.0, 5.0),
+    vec3(0.0, 10.0, 10.0),
+    vec3(-10.0, 5.0, -5.0)
+
 );
 vec3 ambientColor = vec3(0.3, 0.3, 0.3);
 vec3 specularColor = vec3(1.0, 1.0, 1.0);
-float shininess = 256.0;
+float shininess = 1024.0;
 float fresnelPower = 5.0;
 float metallic = 0.9;
 float roughness = 0.3;
@@ -54,15 +63,15 @@ void main() {
     vec3 albedo2 = texture2D(uTexture2, vTexCoord).rgb;
     vec3 albedo3 = texture2D(uTexture3, vTexCoord).rgb;
     // Combine the textures (e.g., mix them based on a factor)
-    float mixFactor = 0.4; // You can adjust or compute this dynamically
+    float mixFactor = 0.56; // You can adjust or compute this dynamically
     vec3 albedo = mix(albedo1, albedo2, mixFactor);
-    albedo += mix(albedo2, albedo3, 0.4);
+    albedo += mix(albedo2, albedo3, 0.404);
 
     vec3 finalDiffuse = vec3(0.0);
     vec3 finalSpecular = vec3(0.0);
 
     // Iterate over light sources
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 8; ++i) {
         vec3 lightDir = normalize(lightPositions[i] - vPosition);
         vec3 halfwayDir = normalize(lightDir + viewDir);
 
