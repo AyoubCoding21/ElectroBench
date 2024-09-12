@@ -3,9 +3,9 @@
 precision highp float;
 
 // Varying to pass texture coordinates to the fragment shader
-varying vec3 vNormal;
-varying vec3 vPosition;
-varying vec2 vTexCoord;
+out vec3 vNormal;
+out vec3 vPosition;
+out vec2 vTexCoord;
 
 void main() {
     // Compute normal and position in world space
