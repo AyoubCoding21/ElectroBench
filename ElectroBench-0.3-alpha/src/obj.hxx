@@ -142,9 +142,9 @@ public:
                     std::string file2 = prefix + str;
                     load_texture_to_material(file2, m->texture2, 1);
                 }
-                if(strstr(line.c_str(), "map_Kxd"))
+                if(strstr(line.c_str(), "map_Kt"))
                 {
-                    sscanf(line.c_str(), "map_Kxd %s", str);
+                    sscanf(line.c_str(), "map_Kt %s", str);
                     std::string file3 = prefix + str;
                     load_texture_to_material(file3, m->texture3, 2);
                 }
