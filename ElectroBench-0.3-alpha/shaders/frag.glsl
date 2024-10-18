@@ -2,8 +2,8 @@
 
 precision highp float;
 precision highp sampler2D;
-uniform sampler2D uTexture;  // Original texture
-uniform sampler2D uTexture2; // Second texture
+uniform sampler2D uTexture;  
+uniform sampler2D uTexture2; 
 uniform sampler2D uTexture3;
 
 in vec3 vNormal;
@@ -38,9 +38,7 @@ float shininess = 1024.0;
 float fresnelPower = 5.0;
 float metallic = 0.9;
 float roughness = 0.3;
-
-// Additional variables for dynamic effects
-uniform float timeFactor; // Will be updated externally for dynamic effects
+uniform float timeFactor; 
 
 float GGXDistribution(float alpha, float NoH) {
     float a2 = alpha * alpha;
@@ -58,12 +56,10 @@ void main() {
     vec3 normal = normalize(vNormal);
     vec3 viewDir = normalize(-vPosition);
 
-    // Sample both textures
     vec3 albedo1 = texture2D(uTexture, vTexCoord).rgb;
     vec3 albedo2 = texture2D(uTexture2, vTexCoord).rgb;
     vec3 albedo3 = texture2D(uTexture3, vTexCoord).rgb;
-    // Combine the textures (e.g., mix them based on a factor)
-    float mixFactor = 0.56; // You can adjust or compute this dynamically
+    float mixFactor = 0.56; 
     vec3 albedo = mix(albedo1, albedo2, mixFactor);
     albedo += mix(albedo2, albedo3, 0.404);
 
@@ -98,5 +94,6 @@ void main() {
     vec3 finalColor = color * wave;
 
     gl_FragColor = vec4(finalColor, 1.0);
+
 }
 
