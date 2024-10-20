@@ -50,6 +50,8 @@ private:
         GLuint texture1;
         GLuint texture2;
         GLuint texture3;
+        GLuint texture4;
+        GLuint texture5;
 
         Material(float *ambient, float *diffuse, float *specular) {
             this->ambient = ambient;
@@ -58,6 +60,8 @@ private:
             this->texture1 = 0;
             this->texture2 = 0;
             this->texture3 = 0;
+            this->texture4 = 0;
+            this->texture5 = 0;
         }
     };
 
@@ -147,6 +151,18 @@ public:
                     sscanf(line.c_str(), "map_Kt %s", str);
                     std::string file3 = prefix + str;
                     load_texture_to_material(file3, m->texture3, 2);
+                }
+                if(strstr(line.c_str(), "map_Kp"))
+                {
+                    sscanf(line.c_str(), "map_Kp %s", str);
+                    std::string file4 = prefix + str;
+                    load_texture_to_material(file4, m->texture4, 3);
+                }
+                if(strstr(line.c_str(), "map_Km"))
+                {
+                    sscanf(line.c_str(), "map_Km %s", str);
+                    std::string file5 = prefix + str;
+                    load_texture_to_material(file5, m->texture5, 4);
                 }
             }
         }
@@ -339,6 +355,16 @@ public:
                     glBindTexture(GL_TEXTURE_2D, materials[face.normal].texture2);
                 }
                 if (materials[face.normal].texture3 != 0)
+                {
+                    has_texcoord = true;
+                    glBindTexture(GL_TEXTURE_2D, materials[face.normal].texture3);
+                }
+                if (materials[face.normal].texture4 != 0)
+                {
+                    has_texcoord = true;
+                    glBindTexture(GL_TEXTURE_2D, materials[face.normal].texture3);
+                }
+                if (materials[face.normal].texture5 != 0)
                 {
                     has_texcoord = true;
                     glBindTexture(GL_TEXTURE_2D, materials[face.normal].texture3);

@@ -1,6 +1,7 @@
 newmtl blinn1SG
 illum 2
 map_Ks gold.png
+map_Km chrome.png
 newmtl initialShadingGroup
 illum 2
 Kd 0.50 0.50 0.50
@@ -9,3 +10,4 @@ Tf 1.00 1.00 1.00
 Ni 1.00
 map_Kd Metal.png
 map_Kt copper.png
+map_Kp goldp.png
