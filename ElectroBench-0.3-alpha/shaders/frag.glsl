@@ -343,7 +343,7 @@ float benchNoise(vec2 P)
 {
     float res = 0.0;
     float time = 0.0;
-    for (float i = 0; i < 1; i++)
+    for (float i = 0; i < 500000; i++)
     {
         res = cellular(vec3(P + time, i + 0.4)).x +
               snoise(vec3(P + time, i + 0.8)) +
@@ -469,7 +469,6 @@ void main() {
     float fresnel = pow(1.0 - dot(viewDir, normal), fresnelPower);
     vec3 fresnelEffect = fresnel * specularColor;
 
-    // Additional effects
     // Rim lighting
     float rim = pow(1.0 - dot(normal, viewDir), 2.0);
     vec3 rimColor = vec3(1.0, 0.5, 0.2);
