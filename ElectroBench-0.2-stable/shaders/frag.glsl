@@ -166,7 +166,6 @@ float rand(vec3 P)
   g011 *= norm1.y;
   g101 *= norm1.z;
   g111 *= norm1.w;
-
   float n000 = dot(g000, Pf0);
   float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));
   float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
