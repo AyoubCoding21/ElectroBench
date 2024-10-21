@@ -9,7 +9,9 @@ In v0.2-stable, We are using 3 noise types with high-precision and then mixing t
 
 In the screen is rendered a teapot and then applying the shaders on them.
 
-In 0.3, We are using Disney PBR specular term, Lambertian diffuse term and ambient occulsion sampling with noising and we are loading 4 M4A1 obj with 5 textures into the screen, you can zoom-in by scrolling up and zoom-out by scrolling down.
+In 0.3, We are using Cook-Torance specular term, Lambertian diffuse term, GGX, SSAO, Spherical Harmonics lighting, God rays, ambient occulsion sampling with noising, vignette effect, rim and frensel lighting then we load 4 M4A1 object files with 6 textures into the screen, you can zoom-in by scrolling up and zoom-out by scrolling down.
+
+You can move the camera by long-clicking and moving the mouse.
 
 It's recommended in the benchmark that you zoom in into the maximum in v0.3 to maximize GPU utilisation.
 

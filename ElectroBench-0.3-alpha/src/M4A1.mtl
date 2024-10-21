@@ -2,6 +2,7 @@ newmtl blinn1SG
 illum 2
 map_Ks gold.png
 map_Km chrome.png
+map_Ki titanium.png
 newmtl initialShadingGroup
 illum 2
 Kd 0.50 0.50 0.50
