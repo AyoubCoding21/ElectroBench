@@ -3,11 +3,6 @@ ElectroBench is a 45-second long benchmark specifiacally designed to run on old 
 It uses OpenGL 2.1/3.0, and C++, and uses Make and CMake for compilation. It is designed to be a replacement for glmark (even though it is great and I used it before).
 
 # Effects
-So in v0.1-stable, We are using lambertian + blinn-phong lighting, and FBM based-off 3D Simplex noise to make a procedural texture and then mixing the lighting and the texture together, and then adding some effects, like bloom, pulsating color, uv distortion, shadowing and vignette effect, also the benchmark calculates the score and prints in the terminal.
-
-In v0.2-stable, We are using 3 noise types with high-precision and then mixing them and re-mixing them, then we use phong lighting with no ambient color + frensel reflection, and we use material procedural textures using noising, like brick texture and metal textures and noise color and then mixing them with lighting and showing it on the screen.
-
-In the screen is rendered a teapot and then applying the shaders on them.
 
 In 0.3, We are using Cook-Torance specular term, Lambertian diffuse term, GGX, SSAO, Spherical Harmonics lighting, God rays, ambient occulsion sampling with noising, vignette effect, rim and frensel lighting then we load 4 M4A1 object files with 6 textures into the screen, you can zoom-in by scrolling up and zoom-out by scrolling down.
 
@@ -16,34 +11,9 @@ You can move the camera by long-clicking and moving the mouse.
 It's recommended in the benchmark that you zoom in into the maximum in v0.3 to maximize GPU utilisation.
 
 # How the score is calculated ?
-The score is calculated using this formula : ```fps*2/frametime``` (in version 0.3 only).
-
-For v0.1 and v0.2 : ```fps*9/frametime```.
-
-### PS : 0.1-alpha and 0.2-alpha are considered now stable and aren't maintianed anymore.
+The score is calculated using this formula : ```fps*2/frametime``` 
 
 # How to run ?
-
-Debian-based Operating Systems:
-
-*v0.1-stable*
-
-```bash
-sudo apt install git -y --no-install-recommends
-git clone https://github.com/AyoubCoding21/ElectroBench
-cd ElectroBench/ElectroBench-0.1-stable
-make install all
-```
-
-*v0.2-stable*
-```bash
-sudo apt install git -y --no-install-recommends
-git clone https://github.com/AyoubCoding21/ElectroBench
-cd ElectroBench/ElectroBench-0.2-stable
-make install all
-```
-
-# Build Instructions for v0.3-alpha
 
 Make sure you have `conan 2` installed and then run the following
 command on your machine after cloning repo and going into the 0.3 directory:
