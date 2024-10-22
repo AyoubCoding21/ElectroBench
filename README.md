@@ -1,6 +1,6 @@
 # ElectroBench
-ElectroBench is a 45-second long benchmark specifiacally designed to run on old and modern PCs, don't critise it by it using OpenGL 2.1/3.0, and GLSL 1.2/1.3, Even office PCs have low scores at it.
-It uses OpenGL 2.1/3.0, and C++, and uses Make and CMake for compilation. It is designed to be a replacement for glmark (even though it is great and I used it before).
+ElectroBench is a 45-second long benchmark specifiacally designed to run on old and modern PCs, don't critise it by it using OpenGL 2.1, and GLSL 1.2, Even office PCs have low scores at it.
+It uses OpenGL 2.1, and C++, and uses Conan and CMake for compilation. It is designed to be a replacement for glmark (even though it is great and I used it before).
 
 # Effects
 
