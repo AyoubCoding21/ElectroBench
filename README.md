@@ -32,7 +32,7 @@ cd ..
 
 # Donating
 
-Send me an e-mail : ayoubprogramming96@outlook.com
+Send me in my chat app : https://firechat-51faa.web.app
 
 # Special thanks
 
