@@ -322,12 +322,15 @@ void setup() {
   glBindTexture(GL_TEXTURE_2D, model.m->texture5);
   glActiveTexture(GL_TEXTURE5);
   glBindTexture(GL_TEXTURE_2D, model.m->texture6);
+  glActiveTexture(GL_TEXTURE6);
+  glBindTexture(GL_TEXTURE_2D, model.m->texture7);
   glUniform1i(glGetUniformLocation(program, "uTexture"), 0);
   glUniform1i(glGetUniformLocation(program, "uTexture2"), 1);
   glUniform1i(glGetUniformLocation(program, "uTexture3"), 2);
   glUniform1i(glGetUniformLocation(program, "uTexture4"), 3);
   glUniform1i(glGetUniformLocation(program, "uTexture5"), 4);
   glUniform1i(glGetUniformLocation(program, "uTexture6"), 5);
+  glUniform1i(glGetUniformLocation(program, "uTexture7"), 6);
 }
 
 int main(int argc, char **argv) {
