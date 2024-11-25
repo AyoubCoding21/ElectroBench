@@ -52,6 +52,7 @@ private:
     GLuint texture4;
     GLuint texture5;
     GLuint texture6;
+    GLuint texture7;
 
     Material(float *ambient, float *diffuse, float *specular) {
       this->ambient = ambient;
@@ -63,6 +64,7 @@ private:
       this->texture4 = 0;
       this->texture5 = 0;
       this->texture6 = 0;
+      this->texture7 = 0;
     }
   };
 
@@ -167,6 +169,11 @@ public:
           sscanf(line.c_str(), "map_Ki %s", str);
           std::string file6 = prefix + str;
           load_texture_to_material(file6, m->texture6, 5);
+        }
+        if (strstr(line.c_str(), "map_Ko %s")) {
+          sscanf(line.c_str(), "map_Ko %s", str);
+          std::string file7 = prefix + str;
+          load_texture_to_material(file7, m->texture7, 6);
         }
       }
     }
@@ -376,6 +383,10 @@ public:
         if (materials[face.normal].texture6 != 0) {
           has_texcoord = true;
           glBindTexture(GL_TEXTURE_2D, materials[face.normal].texture6);
+        }
+        if (materials[face.normal].texture7 != 0) {
+          has_texcoord = true;
+          glBindTexture(GL_TEXTURE_2D, materials[face.normal].texture7);
         }
         continue;
       }
