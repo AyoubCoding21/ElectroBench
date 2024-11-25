@@ -6,6 +6,7 @@ uniform sampler2D uTexture3;
 uniform sampler2D uTexture4;
 uniform sampler2D uTexture5;
 uniform sampler2D uTexture6;
+uniform sampler2D uTexture7;
 
 varying vec3 vNormal;
 varying vec3 vPosition;
@@ -438,12 +439,14 @@ void main() {
     vec3 albedo4 = texture2D(uTexture4, vTexCoord).rgb;
     vec3 albedo5 = texture2D(uTexture5, vTexCoord).rgb;
     vec3 albedo6 = texture2D(uTexture6, vTexCoord).rgb;
+    vec3 albedo7 = texture2D(uTexture7, vTexCoord).rgb;
     float mixFactor = 0.56;
     vec3 albedo = mix(albedo1, albedo2, mixFactor);
     albedo += mix(albedo2, albedo3, 0.504);
     albedo += mix(albedo3, albedo4, 0.555);
     albedo += mix(albedo4, albedo5, 0.7);
     albedo += mix(albedo5, albedo6, 0.6);
+    albedo += mix(albedo6, albedo7, 0.5);    
     vec3 finalDiffuse = vec3(0.0);
     vec3 finalSpecular = vec3(0.0);
 
