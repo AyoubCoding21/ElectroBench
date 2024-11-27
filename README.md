@@ -4,7 +4,7 @@ It uses OpenGL 2.1, and C++, and uses Conan and CMake for compilation. It is des
 
 # Effects
 
-We are using Cook-Torance specular term, Lambertian diffuse term, GGX, SSAO, Spherical Harmonics lighting, God rays, ambient occulsion sampling with noising, vignette effect, rim and frensel lighting then we load 4 M4A1 object files with 6 textures into the screen, you can zoom-in by scrolling up and zoom-out by scrolling down.
+We are using Cook-Torance specular term, Lambertian diffuse term, GGX, SSAO, Spherical Harmonics lighting, God rays, ambient occulsion sampling with noising, vignette effect, rim and frensel lighting then we load 4 M4A1 object files with 7 textures into the screen, you can zoom-in by scrolling up and zoom-out by scrolling down.
 
 You can move the camera by long-clicking and moving the mouse.
 
