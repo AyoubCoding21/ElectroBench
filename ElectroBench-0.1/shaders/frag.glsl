@@ -446,7 +446,7 @@ void main() {
     albedo += mix(albedo3, albedo4, 0.555);
     albedo += mix(albedo4, albedo5, 0.7);
     albedo += mix(albedo5, albedo6, 0.6);
-    albedo += mix(albedo6, albedo7, 0.5);    
+    albedo += mix(albedo6, albedo7, 0.45);    
     vec3 finalDiffuse = vec3(0.0);
     vec3 finalSpecular = vec3(0.0);
 
@@ -488,14 +488,14 @@ void main() {
     vec3 sphericalHarmonics = vec3(0.0);
     for (int i = 0; i < 12; ++i) {
         for (int j = 0; j < 12; ++j) {
-            sphericalHarmonics += SphericalHarmonics(normal.x, normal.y, normal.z, i, j) * albedo;
+            sphericalHarmonics += SphericalHarmonics(normal.x, normal.y, normal.z, i, j) * (albedo * 1.1);
         }
     }
     finalDiffuse += sphericalHarmonics;
     float sss = SubSurfaceScattering(normal, viewDir, vPosition);
     finalDiffuse += sss * albedo;
 
-    vec3 color = ambientColor * albedo + finalDiffuse * (1.0 - metallic) + finalSpecular * metallic + fresnelEffect;
+    vec3 color = ambientColor * (albedo + albedo*0.25) + finalDiffuse * (1.0 - metallic) + finalSpecular * metallic + fresnelEffect;
     float wave = sin(vPosition.x * 0.5 + timeFactor) * 0.5 + 0.5;
     vec3 finalColor = color * wave;
 
