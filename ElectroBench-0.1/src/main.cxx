@@ -59,18 +59,18 @@ void initialiseWindow() {
 // Global variables
 GLuint vert, frag, program;
 float a = 0.0f, b = 0.0f;
-float pos_x, pos_y, pos_z, pos2_x, pos2_y, pos2_z;
+float pos_x, pos_y, pos_z;
 float angle_x = 30.0f, angle_y = 0.0f;
 int init_time = time(NULL), final_time, frame;
 int fps;
 int x_old = 0, y_old = 0;
 int current_scroll = 5;
-float zoom_per_scroll, zoom2_per_scroll;
-std::string model_name = "src/M4A1.obj";
+float zoom_per_scroll;
+std::string model_name = "src/UZI.obj";
 bool is_holding_mouse = false;
 bool is_updated = false;
 
-Model model, model2, model3, model4;
+Model model;
 
 // Reads the contents of a text file.
 std::string textFileRead(std::string const &filename) {
@@ -94,12 +94,7 @@ void renderScene() {
   glRotatef(angle_x, 1.0f, 0.0f, 0.0f);
   glRotatef(angle_y, 0.0f, 1.0f, 0.0f);
   model.draw();
-  glTranslatef(pos_x - 40.0f, pos_y - 15.0f, pos_z);
-  model2.draw();
-  glTranslatef(pos_x - 30.0f, pos_y - 10.0f, pos_z);
-  model3.draw();
-  glTranslatef(pos_x + 5.0f, pos_y, pos_z);
-  model4.draw();
+
   glUniform1f(glGetUniformLocation(program, "timeFactor"),
               (float)SDL_GetPerformanceCounter() /
                   (float)SDL_GetPerformanceFrequency());
@@ -198,13 +193,11 @@ void handleMouseEvent(SDL_Event &event) {
       if (current_scroll > 0) {
         current_scroll--;
         pos_z += zoom_per_scroll;
-        pos2_z += zoom2_per_scroll;
       }
     } else if (event.wheel.y < 0) { // Scroll down
       if (current_scroll < 18) {
         current_scroll++;
         pos_z -= zoom_per_scroll;
-        pos2_z -= zoom2_per_scroll;
       }
     }
   }
@@ -296,19 +289,11 @@ void setup() {
   glEnable(GL_TEXTURE_2D);
   glEnable(GL_DEPTH_TEST);
   model.load(model_name.c_str());
-  model2.load(model_name.c_str());
-  model3.load(model_name.c_str());
-  model4.load(model_name.c_str());
   pos_x = model.pos_x;
   pos_y = model.pos_y;
   pos_z = model.pos_z - 1.0f;
   zoom_per_scroll = -model.pos_z / 8.0f;
 
-  pos2_x = model2.pos_x - 0.5f;
-  pos2_y = model2.pos_y - 0.01f;
-  pos2_z = model2.pos_z - 1.1f;
-
-  zoom2_per_scroll = -model2.pos_z / 8.0f;
   glUseProgram(program);
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, model.m->texture1);

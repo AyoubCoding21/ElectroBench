@@ -2,7 +2,6 @@
 #define GL_TEXTURE_H
 
 #include "process_image.h"
-#include <GL/glut.h>
 #include "loadpng.h"
 
 typedef struct Rect {
