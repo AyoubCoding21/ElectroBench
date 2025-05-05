@@ -4,21 +4,19 @@ It uses OpenGL 2.1, and C++, and uses Conan and CMake for compilation. It is des
 
 # Effects
 
-We are using Cook-Torance specular term, Lambertian diffuse term, GGX, SSAO, Spherical Harmonics lighting, God rays, ambient occulsion sampling with noising, vignette effect, rim and frensel lighting then we load 4 M4A1 object files with 7 textures into the screen, you can zoom-in by scrolling up and zoom-out by scrolling down.
+In this benchmark, we are using realistic lighting techniques, thanks to the shaders (with some limitations, of course), then we load 90 UZIs (!!) with 6 textures each onto the screen.
 
 You can move the camera by long-clicking and moving the mouse.
 
-It's recommended in the benchmark that you zoom in into the maximum to maximize GPU utilisation.
-
 # How the score is calculated ?
-The score is calculated using this formula : ```fps*2/frametime``` 
+The score is calculated using this formula : ```fps*2/(1.01/fps)``` 
 
 # How to run ?
 
 Make sure you have `conan 2` installed and then run the following
 command on your machine after cloning repo and going into the 0.1 directory:
 
-***Make sure that you have clang-15 or more installed and that you copy conanprofile's contents into ~/.conan2/profiles/default in order for this to work.***
+***Make sure that you have clang installed and that you copy conanprofile's contents into ~/.conan2/profiles/default in order for this to work.***
 
 ```sh
 conan install . --output-folder="conan/deb" -sbuild_type=Debug --build=missing -pr conanprofile
@@ -30,9 +28,13 @@ cd ..
 ./build/ElectroBench
 ```
 
+# Contributions
+
+Contributions are welcome, just post a PR / issue.
+
 # Donating
 
-Send me in my chat app : https://firechat-51faa.web.app
+Send me in my email or post an issue : ayoubprogramming96@outlook.com
 
 # Special thanks
 

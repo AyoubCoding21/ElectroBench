@@ -1,27 +1,10 @@
 // Libraries to include
-
-#include "SDL2/SDL.h"
-#include "obj.hxx"
-#include "SDL2/SDL_opengl.h"
-
-
-#include <SDL2/SDL_video.h>
-#include <array>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <ctime>
-#include <fstream>
-#include <iostream>
-#include <iterator>
-#include <string>
-
-#define NAME "ElectroBench"
+#include "../lib/util.hxx"
 
 SDL_Window *window;
 SDL_GLContext glContext;
 
-// Anonymous namespace
+// Anonymous namespace to initialise window
 namespace {
 void initialiseWindow() {
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -58,7 +41,6 @@ void initialiseWindow() {
 
 // Global variables
 GLuint vert, frag, program;
-float a = 0.0f, b = 0.0f;
 float pos_x, pos_y, pos_z;
 float angle_x = 30.0f, angle_y = 0.0f;
 int init_time = time(NULL), final_time, frame;
@@ -66,12 +48,14 @@ int fps;
 int x_old = 0, y_old = 0;
 int current_scroll = 5;
 float zoom_per_scroll;
-std::string model_name = "src/UZI.obj";
+std::string model_name = "assets/UZI.obj";
 bool is_holding_mouse = false;
 bool is_updated = false;
 
 Model model;
 
+// @fun textFileRead
+// @args: filename : const string
 // Reads the contents of a text file.
 std::string textFileRead(std::string const &filename) {
   if (!filename.empty()) {
@@ -83,40 +67,64 @@ std::string textFileRead(std::string const &filename) {
   return {};
 }
 
-/// Renders the scene
+float a, b;
+
+// Renders the scene (90 UZIs!) and calculates FPS
 void renderScene() {
-  Uint32 timet = SDL_GetTicks();
+    unsigned int timet = SDL_GetTicks();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+    glClearColor(0.25, 0.25, 0.25, 1.0);
 
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glLoadIdentity();
-  glTranslatef(pos_x, pos_y, pos_z);
-  glClearColor(0.25, 0.25, 0.25, 1.0);
-  glRotatef(angle_x, 1.0f, 0.0f, 0.0f);
-  glRotatef(angle_y, 0.0f, 1.0f, 0.0f);
-  model.draw();
 
-  glUniform1f(glGetUniformLocation(program, "timeFactor"),
-              (float)SDL_GetPerformanceCounter() /
-                  (float)SDL_GetPerformanceFrequency());
-  SDL_GL_SwapWindow(window);
+    int rows = 9;
+    int cols = 10;
 
-  frame++;
-  a++;
-  b++;
-  final_time = time(NULL);
-  if (final_time - init_time > 0) {
-    char title[256];
-    fps = frame / (final_time - init_time);
-    snprintf(title, 256, "ElectroBench - FPS : %d", fps);
-    SDL_SetWindowTitle(window, title);
-    frame = 0;
-    init_time = final_time;
-  }
-  if (timet >= 45000) {
-    printf("Benchmark Results - Score : %f\n", (fps * 2) / (1.01 / fps));
-    SDL_Quit();
-    exit(0);
-  }
+    float spacing = 0.14f;
+
+    pos_z = -1.18f;
+    float camera_shift_x = -0.6f;
+    glTranslatef(camera_shift_x, -0.5f, 0.0f);
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            glPushMatrix();
+
+            float posOffsetX = j * spacing;
+            float posOffsetY = i * spacing;
+
+            glTranslatef(pos_x + posOffsetX, pos_y + posOffsetY, pos_z);
+
+            glRotatef(angle_x + (i + j) * 10.0f, 1.0f, 0.0f, 0.0f);
+            glRotatef(angle_y + (i + j) * 15.0f, 0.0f, 1.0f, 0.0f);
+
+            model.draw();
+
+            glPopMatrix();
+        }
+    }
+
+    glUniform1f(glGetUniformLocation(program, "timeFactor"),
+                (float)SDL_GetPerformanceCounter() /
+                    (float)SDL_GetPerformanceFrequency());
+    SDL_GL_SwapWindow(window);
+
+    frame++;
+    a++;
+    b++;
+    final_time = time(NULL);
+    if (final_time - init_time > 0) {
+        char title[256];
+        fps = frame / (final_time - init_time);
+        snprintf(title, 256, "ElectroBench - FPS : %d", fps);
+        SDL_SetWindowTitle(window, title);
+        frame = 0;
+        init_time = final_time;
+    }
+    if (timet >= 60000) {
+        printf("Benchmark Results - Score : %f\n", (fps * 2) / (1.01 / fps));
+        SDL_Quit();
+        exit(0);
+    }
 }
 
 // Processes keyboard input.
@@ -185,23 +193,12 @@ void handleMouseEvent(SDL_Event &event) {
       is_holding_mouse = true;
     }
   } else if (event.type == SDL_MOUSEBUTTONUP) {
-    if (event.button.button == SDL_BUTTON_LEFT) {
-      is_holding_mouse = false;
-    }
-  } else if (event.type == SDL_MOUSEWHEEL) {
-    if (event.wheel.y > 0) { // Scroll up
-      if (current_scroll > 0) {
-        current_scroll--;
-        pos_z += zoom_per_scroll;
-      }
-    } else if (event.wheel.y < 0) { // Scroll down
-      if (current_scroll < 18) {
-        current_scroll++;
-        pos_z -= zoom_per_scroll;
-      }
-    }
-  }
+     if (event.button.button == SDL_BUTTON_LEFT) {
+       is_holding_mouse = false;
+     }
+   }
 }
+
 
 void handleMouseMotion(SDL_Event &event) {
   if (is_holding_mouse) {
@@ -275,7 +272,7 @@ void setup() {
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(20.0, 1.0, 1.0, 2000.0);
+  gluPerspective(65.0f, 1.0f, 1.0f, 90.0f);
   glMatrixMode(GL_MODELVIEW);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -291,7 +288,7 @@ void setup() {
   model.load(model_name.c_str());
   pos_x = model.pos_x;
   pos_y = model.pos_y;
-  pos_z = model.pos_z - 1.0f;
+  pos_z = -2.0f;
   zoom_per_scroll = -model.pos_z / 8.0f;
 
   glUseProgram(program);
@@ -307,15 +304,12 @@ void setup() {
   glBindTexture(GL_TEXTURE_2D, model.m->texture5);
   glActiveTexture(GL_TEXTURE5);
   glBindTexture(GL_TEXTURE_2D, model.m->texture6);
-  glActiveTexture(GL_TEXTURE6);
-  glBindTexture(GL_TEXTURE_2D, model.m->texture7);
-  glUniform1i(glGetUniformLocation(program, "uTexture"), 0);
-  glUniform1i(glGetUniformLocation(program, "uTexture2"), 1);
-  glUniform1i(glGetUniformLocation(program, "uTexture3"), 2);
-  glUniform1i(glGetUniformLocation(program, "uTexture4"), 3);
-  glUniform1i(glGetUniformLocation(program, "uTexture5"), 4);
-  glUniform1i(glGetUniformLocation(program, "uTexture6"), 5);
-  glUniform1i(glGetUniformLocation(program, "uTexture7"), 6);
+  glUniform1i(glGetUniformLocation(program, "uBaseColor"), 0);
+  glUniform1i(glGetUniformLocation(program, "uNormalMap"), 1);
+  glUniform1i(glGetUniformLocation(program, "uMetallicMap"), 2);
+  glUniform1i(glGetUniformLocation(program, "uHeightMap"), 3);
+  glUniform1i(glGetUniformLocation(program, "uAOMap"), 4);
+  glUniform1i(glGetUniformLocation(program, "uRoughnessMap"), 5);
 }
 
 int main(int argc, char **argv) {
