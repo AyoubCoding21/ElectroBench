@@ -11,9 +11,8 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd UZI_BaseColor.png
-map_Ks UZI_AO.png
-map_Kp UZI_Normal.png
-map_Ki UZI_Metallic.png
-map_Ko UZI_Roughness.png
-map_Kt UZI_Height.png
-map
+map_Ks UZI_Normal.png
+map_Kt UZI_Metallic.png
+map_Kp UZI_Height.png
+map_Km UZI_AO.png
+map_Ki UZI_Roughness.png
